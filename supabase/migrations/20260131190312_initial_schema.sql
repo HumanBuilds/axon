@@ -24,7 +24,7 @@ CREATE TABLE profiles (
 
 -- Decks table
 CREATE TABLE decks (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   description TEXT,
@@ -37,7 +37,7 @@ CREATE TABLE decks (
 
 -- Cards table with complete FSRS v5 state
 CREATE TABLE cards (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   deck_id UUID NOT NULL REFERENCES decks(id) ON DELETE CASCADE,
   
   -- Content fields (Markdown supported)
@@ -95,7 +95,7 @@ CREATE TABLE cards (
 
 -- Review logs for analytics and potential FSRS parameter optimization
 CREATE TABLE review_logs (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   card_id UUID NOT NULL REFERENCES cards(id) ON DELETE CASCADE,
   
   -- The rating given by the user
