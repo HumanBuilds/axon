@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="en" data-theme="wireframe">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
         <Header />
-        <div className="flex-1 max-w-5xl mx-auto w-full bg-base-100 border-x border-base-300 shadow-sm flex flex-col -mt-[80px] pt-[80px]">
+        <div className="flex-1 max-w-5xl mx-auto w-full bg-base-100 border-x border-t border-base-300 shadow-sm flex flex-col mt-6 rounded-t-2xl overflow-hidden">
           <main className="flex-1">
             {children}
           </main>
