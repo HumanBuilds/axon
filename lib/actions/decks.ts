@@ -35,3 +35,31 @@ export async function createDeck(formData: FormData) {
 
     revalidatePath('/decks');
 }
+
+export async function updateDeckName(deckId: string, name: string) {
+    const supabase = await createClient();
+
+    // Get user session
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+        throw new Error('Unauthorized');
+    }
+
+    if (!name) {
+        throw new Error('Name is required');
+    }
+
+    const { error } = await supabase
+        .from('decks')
+        .update({ name })
+        .eq('id', deckId)
+        .eq('user_id', user.id);
+
+    if (error) {
+        console.error('Error updating deck:', error);
+        throw new Error(error.message);
+    }
+
+    revalidatePath('/decks');
+}

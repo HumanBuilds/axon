@@ -39,7 +39,6 @@ export default async function DecksPage() {
                             key={deck.id}
                             id={deck.id}
                             name={deck.name}
-                            description={deck.description}
                             cardCount={deck.card_count || 0}
                             dueCount={0} // We'd need a separate query or join for this in a real app
                             color={deck.color}
