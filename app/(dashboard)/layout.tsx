@@ -6,9 +6,9 @@ export default function DashboardLayout({
     children: React.ReactNode;
 }) {
     return (
-        <div className="min-h-screen bg-base-100 flex flex-col">
-            <header className="navbar bg-base-200 shadow-sm px-4">
-                <div className="max-w-5xl mx-auto w-full flex items-center justify-between">
+        <div className="min-h-screen flex flex-col">
+            <header className="navbar bg-base-100 border-b border-base-300 sticky top-0 z-50">
+                <div className="max-w-5xl mx-auto w-full flex items-center justify-between px-4">
                     <div className="flex-1">
                         <Link href="/" className="btn btn-ghost text-xl font-bold tracking-tighter">
                             AXON
@@ -31,10 +31,10 @@ export default function DashboardLayout({
                     </div>
                 </div>
             </header>
-            <main className="flex-1">
+            <main className="flex-1 bg-base-100 max-w-5xl mx-auto w-full border-x border-base-300 shadow-sm">
                 {children}
             </main>
-            <footer className="footer footer-center p-4 bg-base-300 text-base-content text-xs opacity-50">
+            <footer className="footer footer-center p-4 bg-transparent text-base-content text-xs opacity-50">
                 <aside>
                     <p>Axon Flashcards © 2026 - Powered by FSRS</p>
                 </aside>

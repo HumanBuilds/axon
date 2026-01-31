@@ -20,3 +20,10 @@
   --radius-box: 1px;
   --radius-button: 1px;
 }
+
+body {
+  background-color: oklch(98% 0 0);
+  background-image: radial-gradient(oklch(0% 0 0 / 5%) 1px, transparent 0);
+  background-size: 10px 10px;
+  background-attachment: fixed;
+}
