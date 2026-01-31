@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+/* Load plugins via CSS (Tailwind v4 style) */
+@plugin "daisyui";
+@plugin "@tailwindcss/typography";
+
+/* daisyUI theme configuration */
+@plugin "daisyui" {
+  themes: light, dark, cupcake;
+  darkTheme: dark;
+}
+
+/* Custom theme variables (optional) */
+@theme {
+  --color-card-front: oklch(98% 0.01 240);
+  --color-card-back: oklch(95% 0.02 200);
+}
