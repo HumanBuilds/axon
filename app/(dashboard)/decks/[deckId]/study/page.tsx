@@ -20,7 +20,7 @@ export default async function StudyPage({ params }: { params: Promise<{ deckId: 
     }
 
     return (
-        <div className="container mx-auto px-4 py-12">
+        <div className="py-12">
             <h1 className="text-3xl font-black tracking-tight mb-12 text-center uppercase opacity-20">Study Session</h1>
             <StudySession initialCards={cards ?? []} />
         </div>

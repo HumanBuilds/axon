@@ -19,11 +19,27 @@
   --radius-field: 1px;
   --radius-box: 1px;
   --radius-button: 1px;
+
+  /* Font Family Overrides */
+  --font-lexend: var(--font-lexend), Lexend, ui-sans-serif, system-ui, sans-serif;
+  --font-satoshi: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
+  font-family: var(--font-lexend);
   background-color: oklch(98% 0 0);
   background-image: radial-gradient(oklch(0% 0 0 / 5%) 1px, transparent 0);
   background-size: 10px 10px;
   background-attachment: fixed;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.card-title,
+.btn {
+  font-family: var(--font-satoshi);
 }

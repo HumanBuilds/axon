@@ -42,7 +42,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="px-4 py-12">
+    <div className="py-12">
       <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-16 text-center md:text-left transition-all">
         <div>
           <h1 className="text-5xl font-black tracking-tight mb-2">My Decks</h1>
