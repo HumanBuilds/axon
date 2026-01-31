@@ -1,0 +1,131 @@
+@plugin "@tailwindcss/typography";
+@plugin "daisyui";
+
+@theme {
+    /* --- Fonts --- */
+    --font-header: "Aeonik", "Inter", ui-sans-serif;
+    --font-body: "Inter", ui-sans-serif;
+    --font-mono: "JetBrains Mono", monospace;
+
+    /* --- Scale: The "Axonic" Proportions --- */
+    --font-size-xs: 0.75rem;
+    /* Tags, micro-copy */
+    --font-size-sm: 0.875rem;
+    /* Sidebar, buttons, inputs */
+    --font-size-base: 1rem;
+    /* Standard body text */
+    --font-size-lg: 1.125rem;
+    /* Reading/Writing text */
+    --font-size-xl: 1.25rem;
+    /* Small headings */
+    --font-size-2xl: 1.5rem;
+    /* Sub-headings */
+    --font-size-3xl: 2rem;
+    /* Main Card Titles */
+    --font-size-4xl: 2.5rem;
+    /* Hero/Page Titles */
+
+    /* --- Weights --- */
+    --font-weight-thin: 300;
+    /* Use sparingly for style */
+    --font-weight-normal: 400;
+    /* Standard reading */
+    --font-weight-medium: 500;
+    /* Navigation & UI Buttons */
+    --font-weight-semibold: 600;
+    /* Subtle emphasis */
+    --font-weight-bold: 700;
+    /* Headings & Brand */
+    --font-weight-black: 800;
+    /* High-impact display */
+}
+
+
+@layer base {
+
+    /* Set the default font for the whole app */
+    html,
+    body {
+        font-family: var(--font-body);
+        font-weight: var(--font-weight-normal);
+        color: var(--color-base-content);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Universal Heading Styles */
+    h1,
+    h2,
+    h3,
+    h4 {
+        font-family: var(--font-header);
+        font-weight: var(--font-weight-bold);
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+        @apply mb-4 text-base-content;
+    }
+
+    h1 {
+        font-size: var(--font-size-4xl);
+        font-weight: var(--font-weight-black);
+    }
+
+    h2 {
+        font-size: var(--font-size-3xl);
+    }
+
+    h3 {
+        font-size: var(--font-size-2xl);
+    }
+
+    h4 {
+        font-size: var(--font-size-xl);
+    }
+
+    /* Body Paragraphs */
+    p {
+        line-height: 1.6;
+        margin-bottom: 1.25rem;
+    }
+
+    /* Global UI Elements */
+    button,
+    .btn {
+        font-family: var(--font-header);
+        font-weight: var(--font-weight-medium);
+        letter-spacing: 0.01em;
+    }
+
+    code,
+    kbd,
+    pre {
+        font-family: var(--font-mono);
+        @apply text-sm;
+    }
+}
+
+
+@layer components {
+
+    /* Use this for long-form writing or detailed flashcard answers */
+    .axonic-reading-container {
+        @apply prose prose-slate mx-auto;
+        max-width: 65ch;
+        /* The optimal line length for reading comprehension */
+
+        & p {
+            font-size: var(--font-size-lg);
+            line-height: var(--leading-relaxed);
+        }
+
+        & blockquote {
+            @apply border-l-4 border-primary italic font-medium bg-base-200/30 p-4 rounded-r-lg;
+        }
+    }
+
+    /* Use this for sidebar navigation or dashboard labels */
+    .ui-label {
+        @apply text-xs font-semibold uppercase tracking-widest text-base-content/60;
+        font-family: var(--font-mono);
+    }
+}

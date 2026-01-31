@@ -1,8 +1,5 @@
 @import "tailwindcss";
-
-/* Load plugins via CSS (Tailwind v4 style) */
-@plugin "daisyui";
-@plugin "@tailwindcss/typography";
+@import "./typography.css";
 
 /* daisyUI theme configuration */
 @plugin "daisyui" {
@@ -10,55 +7,21 @@
   defaultTheme: wireframe;
 }
 
-/* Local Font: Satoshi */
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/assets/fonts/satoshi/Satoshi-Variable.woff2') format('woff2-variations'),
-    url('/assets/fonts/satoshi/Satoshi-Variable.woff2') format('woff2');
-  font-weight: 300 900;
-  font-display: swap;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/assets/fonts/satoshi/Satoshi-VariableItalic.woff2') format('woff2-variations'),
-    url('/assets/fonts/satoshi/Satoshi-VariableItalic.woff2') format('woff2');
-  font-weight: 300 900;
-  font-display: swap;
-  font-style: italic;
-}
-
 /* Custom theme variables */
 @theme {
   --color-card-front: oklch(98% 0.01 240);
   --color-card-back: oklch(95% 0.02 200);
-  /* Make buttons and inputs squarer with 1px rounding */
+
+  /* UI Rounding */
   --radius-selector: 1px;
   --radius-field: 1px;
   --radius-box: 1px;
   --radius-button: 1px;
-
-  /* Font Family Overrides */
-  --font-lexend: 'Lexend', ui-sans-serif, system-ui, sans-serif;
-  --font-satoshi: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
-  font-family: var(--font-lexend);
   background-color: oklch(98% 0 0);
   background-image: radial-gradient(oklch(0% 0 0 / 5%) 1px, transparent 0);
   background-size: 10px 10px;
   background-attachment: fixed;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.card-title,
-.btn {
-  font-family: var(--font-satoshi);
 }

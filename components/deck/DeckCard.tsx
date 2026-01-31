@@ -21,10 +21,25 @@ export function DeckCard({ id, name, cardCount, dueCount, color = '#6366f1' }: D
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
+        let leaveTimer: NodeJS.Timeout;
+        if (!isHovering && isEditing) {
+            leaveTimer = setTimeout(() => {
+                setIsEditing(false);
+                setEditName(name); // Reset to original name
+            }, 1000); // 1 second grace period to move mouse back
+        }
+        return () => clearTimeout(leaveTimer);
+    }, [isHovering, isEditing, name]);
+
+    useEffect(() => {
+        if (isEditing && !isHovering) {
+            // If we started editing via hover, but mouse already left
+        }
+
         if (isHovering && !isEditing) {
             hoverTimerRef.current = setTimeout(() => {
                 setIsEditing(true);
-            }, 1500); // 1.5 seconds hover to edit
+            }, 1000); // 1.0 seconds hover to edit
         } else {
             if (hoverTimerRef.current) {
                 clearTimeout(hoverTimerRef.current);
@@ -40,8 +55,9 @@ export function DeckCard({ id, name, cardCount, dueCount, color = '#6366f1' }: D
 
     useEffect(() => {
         if (isEditing && inputRef.current) {
+            const val = inputRef.current.value;
             inputRef.current.focus();
-            inputRef.current.select();
+            inputRef.current.setSelectionRange(val.length, val.length);
         }
     }, [isEditing]);
 
@@ -78,7 +94,11 @@ export function DeckCard({ id, name, cardCount, dueCount, color = '#6366f1' }: D
                 style={{ backgroundColor: color }}
             />
             <div className="card-body">
-                <div className="flex justify-between items-start mb-4 gap-4">
+                <div
+                    className="flex justify-between items-start mb-4 gap-4"
+                    onMouseEnter={() => setIsHovering(true)}
+                    onMouseLeave={() => setIsHovering(false)}
+                >
                     {isEditing ? (
                         <input
                             ref={inputRef}
@@ -92,8 +112,6 @@ export function DeckCard({ id, name, cardCount, dueCount, color = '#6366f1' }: D
                     ) : (
                         <h2
                             className={`card-title text-2xl tracking-tight transition-opacity cursor-text grow ${isHovering ? 'opacity-70' : ''}`}
-                            onMouseEnter={() => setIsHovering(true)}
-                            onMouseLeave={() => setIsHovering(false)}
                             title="Hover to edit name"
                         >
                             {name}
