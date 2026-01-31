@@ -10,6 +10,25 @@
   defaultTheme: wireframe;
 }
 
+/* Local Font: Satoshi */
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/assets/fonts/satoshi/Satoshi-Variable.woff2') format('woff2-variations'),
+    url('/assets/fonts/satoshi/Satoshi-Variable.woff2') format('woff2');
+  font-weight: 300 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/assets/fonts/satoshi/Satoshi-VariableItalic.woff2') format('woff2-variations'),
+    url('/assets/fonts/satoshi/Satoshi-VariableItalic.woff2') format('woff2');
+  font-weight: 300 900;
+  font-display: swap;
+  font-style: italic;
+}
+
 /* Custom theme variables */
 @theme {
   --color-card-front: oklch(98% 0.01 240);
@@ -21,7 +40,7 @@
   --radius-button: 1px;
 
   /* Font Family Overrides */
-  --font-lexend: var(--font-lexend), Lexend, ui-sans-serif, system-ui, sans-serif;
+  --font-lexend: 'Lexend', ui-sans-serif, system-ui, sans-serif;
   --font-satoshi: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
 }
 
