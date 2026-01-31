@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { DeckCard } from '@/components/deck/DeckCard';
-import Link from 'next/link';
+import { CreateDeckButton } from '@/components/deck/CreateDeckButton';
 
 export default async function DecksPage() {
     const supabase = await createClient();
@@ -22,17 +22,15 @@ export default async function DecksPage() {
                     <h1 className="text-4xl font-black tracking-tight mb-2">My Decks</h1>
                     <p className="opacity-50">Select a deck to start your study session.</p>
                 </div>
-                <button className="btn btn-primary px-8">
-                    + Create Deck
-                </button>
+                <CreateDeckButton />
             </div>
 
             {(!decks || decks.length === 0) ? (
                 <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-base-300 rounded-lg">
                     <p className="text-lg opacity-50 mb-6">You don't have any decks yet.</p>
-                    <button className="btn btn-primary btn-outline">
+                    <CreateDeckButton className="btn btn-primary btn-outline">
                         Create your first deck
-                    </button>
+                    </CreateDeckButton>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
