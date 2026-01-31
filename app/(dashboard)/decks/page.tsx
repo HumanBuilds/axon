@@ -22,15 +22,15 @@ export default async function DecksPage() {
                     <h1 className="text-4xl font-black tracking-tight mb-2">My Decks</h1>
                     <p className="opacity-50">Select a deck to start your study session.</p>
                 </div>
-                <button className="btn btn-primary rounded-full px-8">
+                <button className="btn btn-primary px-8">
                     + Create Deck
                 </button>
             </div>
 
             {(!decks || decks.length === 0) ? (
-                <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-base-300 rounded-3xl">
+                <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-base-300 rounded-lg">
                     <p className="text-lg opacity-50 mb-6">You don't have any decks yet.</p>
-                    <button className="btn btn-primary btn-outline rounded-full">
+                    <button className="btn btn-primary btn-outline">
                         Create your first deck
                     </button>
                 </div>

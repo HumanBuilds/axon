@@ -14,8 +14,9 @@
 @theme {
   --color-card-front: oklch(98% 0.01 240);
   --color-card-back: oklch(95% 0.02 200);
-  /* Make buttons and inputs squarer with 2px rounding */
-  --radius-selector: 2px;
-  --radius-field: 2px;
-  --radius-box: 4px;
+  /* Make buttons and inputs squarer with 1px rounding */
+  --radius-selector: 1px;
+  --radius-field: 1px;
+  --radius-box: 1px;
+  --radius-button: 1px;
 }

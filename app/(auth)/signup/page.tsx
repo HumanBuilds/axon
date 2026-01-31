@@ -98,7 +98,7 @@ export default function SignupPage() {
 
                         <div className="form-control mt-6">
                             <button
-                                className={`btn btn-primary rounded-full ${loading ? 'loading' : ''}`}
+                                className={`btn btn-primary ${loading ? 'loading' : ''}`}
                                 disabled={loading}
                             >
                                 {loading ? 'Creating account...' : 'Sign Up'}

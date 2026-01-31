@@ -9,7 +9,7 @@ export default function Home() {
         </div>
         <div className="flex-none">
           <Link href="/login" className="btn btn-ghost">Login</Link>
-          <Link href="/signup" className="btn btn-primary rounded-full px-8">Sign Up</Link>
+          <Link href="/signup" className="btn btn-primary px-8">Sign Up</Link>
         </div>
       </header>
 
@@ -25,17 +25,17 @@ export default function Home() {
             Axon uses advanced spaced repetition algorithms to ensure you never forget what you've learned. Efficient, effective, and beautiful.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/decks" className="btn btn-primary btn-lg rounded-full px-12 text-lg">
+            <Link href="/decks" className="btn btn-primary btn-lg px-12 text-lg">
               Get Started
             </Link>
-            <a href="#features" className="btn btn-outline btn-lg rounded-full px-12 text-lg">
+            <a href="#features" className="btn btn-outline btn-lg px-12 text-lg">
               Learn More
             </a>
           </div>
         </div>
 
         <div className="mt-20 w-full max-w-5xl">
-          <div className="aspect-video bg-base-300 rounded-3xl shadow-2xl overflow-hidden relative group">
+          <div className="aspect-video bg-base-300 rounded-lg shadow-2xl overflow-hidden relative group">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="card w-80 h-48 bg-base-100 shadow-xl border-2 border-primary/20 rotate-[-5deg] group-hover:rotate-0 transition-transform duration-500">
                 <div className="card-body items-center justify-center italic opacity-50">
