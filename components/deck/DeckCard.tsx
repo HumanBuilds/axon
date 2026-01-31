@@ -72,17 +72,13 @@ export function DeckCard({ id, name, cardCount, dueCount, color = '#6366f1' }: D
     };
 
     return (
-        <div
-            className="card bg-base-100 shadow-sm hover:shadow-md transition-shadow border border-base-300 overflow-hidden"
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
-        >
+        <div className="card bg-base-100 shadow-sm hover:shadow-md transition-shadow border border-base-300 overflow-hidden">
             <div
                 className="h-2 w-full"
                 style={{ backgroundColor: color }}
             />
             <div className="card-body">
-                <div className="flex justify-between items-start mb-4">
+                <div className="flex justify-between items-start mb-4 gap-4">
                     {isEditing ? (
                         <input
                             ref={inputRef}
@@ -95,13 +91,14 @@ export function DeckCard({ id, name, cardCount, dueCount, color = '#6366f1' }: D
                         />
                     ) : (
                         <h2
-                            className={`card-title text-2xl tracking-tight transition-opacity ${isHovering ? 'opacity-70' : ''}`}
+                            className={`card-title text-2xl tracking-tight transition-opacity cursor-text grow ${isHovering ? 'opacity-70' : ''}`}
+                            onMouseEnter={() => setIsHovering(true)}
+                            onMouseLeave={() => setIsHovering(false)}
                             title="Hover to edit name"
                         >
                             {name}
                         </h2>
                     )}
-                    <div className="badge badge-neutral ml-2">{cardCount} cards</div>
                 </div>
 
                 <div className="card-actions justify-between items-center">

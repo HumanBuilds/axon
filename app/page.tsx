@@ -3,13 +3,15 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <div className="min-h-screen bg-base-100 flex flex-col">
-      <header className="navbar bg-transparent absolute top-0 w-full px-8 py-4">
-        <div className="flex-1">
-          <span className="text-2xl font-black tracking-tighter">AXON</span>
-        </div>
-        <div className="flex-none">
-          <Link href="/login" className="btn btn-ghost">Login</Link>
-          <Link href="/signup" className="btn btn-primary px-8">Sign Up</Link>
+      <header className="navbar bg-transparent absolute top-0 w-full px-4 py-4 z-10">
+        <div className="max-w-7xl mx-auto w-full flex justify-between items-center px-4">
+          <div className="flex-1">
+            <span className="text-2xl font-black tracking-tighter">AXON</span>
+          </div>
+          <div className="flex-none flex items-center gap-4">
+            <Link href="/login" className="btn btn-ghost">Login</Link>
+            <Link href="/signup" className="btn btn-primary px-8">Sign Up</Link>
+          </div>
         </div>
       </header>
 
