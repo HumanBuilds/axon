@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 export default function SignupPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [username, setUsername] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
@@ -22,11 +21,6 @@ export default function SignupPage() {
         const { error } = await supabase.auth.signUp({
             email,
             password,
-            options: {
-                data: {
-                    username: username,
-                },
-            },
         });
 
         if (error) {
@@ -47,7 +41,7 @@ export default function SignupPage() {
                         <p className="opacity-60 mb-8">
                             We've sent a confirmation link to <strong>{email}</strong>. Please verify your account to get started.
                         </p>
-                        <Link href="/login" className="btn btn-primary rounded-full">
+                        <Link href="/login" className="btn btn-primary">
                             Back to Login
                         </Link>
                     </div>
@@ -66,19 +60,6 @@ export default function SignupPage() {
                     </div>
 
                     <form onSubmit={handleSignup} className="space-y-4">
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Username</span>
-                            </label>
-                            <input
-                                type="text"
-                                className="input input-bordered"
-                                placeholder="johndoe"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                required
-                            />
-                        </div>
                         <div className="form-control">
                             <label className="label">
                                 <span className="label-text">Email</span>
