@@ -20,30 +20,19 @@ export function DeckCard({ id, name, cardCount, dueCount, color = '#6366f1' }: D
     const hoverTimerRef = useRef<NodeJS.Timeout | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
+    // Handle hover-to-edit timer and exit-on-leave grace period
     useEffect(() => {
-        let leaveTimer: NodeJS.Timeout;
-        if (!isHovering && isEditing) {
-            leaveTimer = setTimeout(() => {
-                setIsEditing(false);
-                setEditName(name); // Reset to original name
-            }, 1000); // 1 second grace period to move mouse back
-        }
-        return () => clearTimeout(leaveTimer);
-    }, [isHovering, isEditing, name]);
-
-    useEffect(() => {
-        if (isEditing && !isHovering) {
-            // If we started editing via hover, but mouse already left
-        }
-
         if (isHovering && !isEditing) {
+            // Start timer to enter edit mode after hovering
             hoverTimerRef.current = setTimeout(() => {
                 setIsEditing(true);
-            }, 1000); // 1.0 seconds hover to edit
-        } else {
-            if (hoverTimerRef.current) {
-                clearTimeout(hoverTimerRef.current);
-            }
+            }, 1000);
+        } else if (!isHovering && isEditing) {
+            // Grace period to move mouse back before exiting edit mode
+            hoverTimerRef.current = setTimeout(() => {
+                setIsEditing(false);
+                setEditName(name);
+            }, 1000);
         }
 
         return () => {
@@ -51,8 +40,9 @@ export function DeckCard({ id, name, cardCount, dueCount, color = '#6366f1' }: D
                 clearTimeout(hoverTimerRef.current);
             }
         };
-    }, [isHovering, isEditing]);
+    }, [isHovering, isEditing, name]);
 
+    // Focus input when entering edit mode
     useEffect(() => {
         if (isEditing && inputRef.current) {
             const val = inputRef.current.value;

@@ -222,3 +222,22 @@ export function getDisplayName(lang: string): string {
 export function getSupportedLanguages(): string[] {
     return [...Object.keys(languageConfigs), ...Object.keys(aliases)];
 }
+
+/**
+ * Popular languages for UI dropdowns
+ */
+export const POPULAR_LANGUAGES = [
+    'javascript',
+    'typescript',
+    'python',
+    'rust',
+    'go',
+    'java',
+    'c',
+    'cpp',
+    'sql',
+    'bash',
+    'html',
+    'css',
+    'json',
+] as const;

@@ -1,17 +1,10 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
+import { requireAuth } from './auth';
 
 export async function createDeck(formData: FormData) {
-    const supabase = await createClient();
-
-    // Get user session
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-        throw new Error('Unauthorized');
-    }
+    const { supabase, user } = await requireAuth();
 
     const name = formData.get('name') as string;
     const description = formData.get('description') as string;
@@ -37,14 +30,7 @@ export async function createDeck(formData: FormData) {
 }
 
 export async function updateDeckName(deckId: string, name: string) {
-    const supabase = await createClient();
-
-    // Get user session
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-        throw new Error('Unauthorized');
-    }
+    const { supabase, user } = await requireAuth();
 
     if (!name) {
         throw new Error('Name is required');

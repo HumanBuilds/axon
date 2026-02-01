@@ -1,18 +1,11 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { createEmptyCard, fsrsToDBCard } from '@/lib/fsrs';
+import { requireAuth } from './auth';
 
 export async function createCard(deckId: string, formData: FormData) {
-    const supabase = await createClient();
-
-    // Get user session to ensure they own the deck (RLS will handle this, but good to check)
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-        throw new Error('Unauthorized');
-    }
+    const { supabase } = await requireAuth();
 
     const front = formData.get('front') as string;
     const back = formData.get('back') as string;
