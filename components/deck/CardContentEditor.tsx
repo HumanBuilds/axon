@@ -7,6 +7,7 @@ import { executeCode, type ExecutionResult, type ExecutionError } from '@/lib/co
 import { parseContent, reconstructContent, isEmptyContent, type ContentSegment } from '@/lib/code/markdown-utils';
 import { InlineCodeEditor } from './InlineCodeEditor';
 import { ExecutionOutput } from './ExecutionOutput';
+import { Markdown } from '@/components/ui/Markdown';
 
 interface CardContentEditorProps {
     value: string;
@@ -47,12 +48,14 @@ export function CardContentEditor({ value, onChange, placeholder }: CardContentE
     const [runningIndex, setRunningIndex] = useState<number | null>(null);
     const [executionResult, setExecutionResult] = useState<{ index: number; result: ExecutionResult | ExecutionError } | null>(null);
     const [activeInsertionPoints, setActiveInsertionPoints] = useState<Set<number>>(new Set());
+    const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
     const segments = useMemo(() => parseContent(value), [value]);
 
-    // Activate an insertion point (expand to textarea)
+    // Activate an insertion point (expand to textarea and start editing)
     const activateInsertionPoint = useCallback((index: number) => {
         setActiveInsertionPoints(prev => new Set(prev).add(index));
+        setEditingIndex(index);
     }, []);
 
     // Handle textarea blur - collapse if empty
@@ -209,15 +212,27 @@ export function CardContentEditor({ value, onChange, placeholder }: CardContentE
                     <div key={`${segment.type}-${index}`}>
                         {segment.type === 'text' ? (
                             shouldShowTextarea(segment, index) ? (
-                                <textarea
-                                    className="w-full resize-none font-mono text-sm p-3 bg-transparent focus:outline-none"
-                                    placeholder={index === 0 ? placeholder : undefined}
-                                    value={segment.content}
-                                    onChange={(e) => updateSegment(index, e.target.value)}
-                                    onBlur={(e) => handleTextareaBlur(index, e.target.value)}
-                                    rows={Math.max(1, segment.content.split('\n').length || 1)}
-                                    autoFocus={activeInsertionPoints.has(index)}
-                                />
+                                editingIndex === index || isEmptyContent(segment.content) ? (
+                                    <textarea
+                                        className="w-full resize-none font-mono text-sm p-3 bg-transparent focus:outline-none"
+                                        placeholder={index === 0 ? placeholder : undefined}
+                                        value={segment.content}
+                                        onChange={(e) => updateSegment(index, e.target.value)}
+                                        onBlur={(e) => {
+                                            handleTextareaBlur(index, e.target.value);
+                                            setEditingIndex(null);
+                                        }}
+                                        rows={Math.max(1, segment.content.split('\n').length || 1)}
+                                        autoFocus={editingIndex === index}
+                                    />
+                                ) : (
+                                    <div
+                                        onClick={() => setEditingIndex(index)}
+                                        className="w-full min-h-[2.5rem] p-3 cursor-text hover:bg-base-200/30 transition-colors prose prose-sm max-w-none"
+                                    >
+                                        <Markdown>{segment.content}</Markdown>
+                                    </div>
+                                )
                             ) : (
                                 <InsertionPoint
                                     onActivate={() => activateInsertionPoint(index)}
