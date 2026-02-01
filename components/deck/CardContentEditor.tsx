@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
-import { getDisplayName, isExecutableLanguage, POPULAR_LANGUAGES } from '@/lib/code/languages';
+import { useState, useMemo, useCallback, useRef } from 'react';
+import { isExecutableLanguage } from '@/lib/code/languages';
+import { LanguageSelectDropdown } from '@/components/ui/LanguageSelectDropdown';
 import { executeCode, type ExecutionResult, type ExecutionError } from '@/lib/code/executor';
 import { parseContent, reconstructContent, isEmptyContent, type ContentSegment } from '@/lib/code/markdown-utils';
 import { InlineCodeEditor } from './InlineCodeEditor';
@@ -42,6 +43,7 @@ function InsertionPoint({ onActivate }: InsertionPointProps) {
 
 export function CardContentEditor({ value, onChange, placeholder }: CardContentEditorProps) {
     const [showLangPicker, setShowLangPicker] = useState(false);
+    const codeButtonRef = useRef<HTMLButtonElement>(null);
     const [runningIndex, setRunningIndex] = useState<number | null>(null);
     const [executionResult, setExecutionResult] = useState<{ index: number; result: ExecutionResult | ExecutionError } | null>(null);
     const [activeInsertionPoints, setActiveInsertionPoints] = useState<Set<number>>(new Set());
@@ -179,6 +181,7 @@ export function CardContentEditor({ value, onChange, placeholder }: CardContentE
             <div className="flex items-center justify-end px-3 py-1.5 bg-base-200/50 border-b border-base-300">
                 <div className="relative">
                     <button
+                        ref={codeButtonRef}
                         type="button"
                         onClick={() => setShowLangPicker(!showLangPicker)}
                         className={`btn btn-xs gap-1 ${showLangPicker ? 'btn-primary' : 'btn-ghost opacity-60 hover:opacity-100'}`}
@@ -190,26 +193,13 @@ export function CardContentEditor({ value, onChange, placeholder }: CardContentE
                         </svg>
                         <span>Code</span>
                     </button>
-                    {showLangPicker && (
-                        <div className="absolute top-full right-0 mt-1 z-50 bg-base-100 border border-base-300 rounded-lg shadow-xl p-2 min-w-48">
-                            <div className="text-[10px] font-bold uppercase tracking-widest opacity-40 px-2 py-1">Select Language</div>
-                            <div className="max-h-48 overflow-y-auto">
-                                {POPULAR_LANGUAGES.map((lang) => (
-                                    <button
-                                        key={lang}
-                                        type="button"
-                                        onClick={() => addCodeBlock(segments.length - 1, lang)}
-                                        className="w-full text-left px-2 py-1.5 text-sm hover:bg-base-200 rounded flex items-center justify-between gap-2"
-                                    >
-                                        <span>{getDisplayName(lang)}</span>
-                                        {isExecutableLanguage(lang) && (
-                                            <span className="text-[9px] font-bold uppercase tracking-wider text-green-500 opacity-60">Run</span>
-                                        )}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    )}
+                    <LanguageSelectDropdown
+                        triggerRef={codeButtonRef}
+                        isOpen={showLangPicker}
+                        onClose={() => setShowLangPicker(false)}
+                        onSelect={(lang) => addCodeBlock(segments.length - 1, lang)}
+                        variant="light"
+                    />
                 </div>
             </div>
 

@@ -2,7 +2,8 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { getDisplayName, isExecutableLanguage, getMonacoLanguage, POPULAR_LANGUAGES } from '@/lib/code/languages';
+import { getDisplayName, getMonacoLanguage } from '@/lib/code/languages';
+import { LanguageSelectDropdown } from '@/components/ui/LanguageSelectDropdown';
 import { axonDarkTheme } from '@/lib/code/monaco-theme';
 import type { OnMount, BeforeMount } from '@monaco-editor/react';
 import type { editor } from 'monaco-editor';
@@ -36,6 +37,7 @@ export interface InlineCodeEditorProps {
 export function InlineCodeEditor({ code, language, onChange, onLanguageChange, onRun, canRun, isRunning }: InlineCodeEditorProps) {
     const [showLangDropdown, setShowLangDropdown] = useState(false);
     const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+    const langButtonRef = useRef<HTMLButtonElement>(null);
     const formatTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const monacoLanguage = getMonacoLanguage(language);
 
@@ -83,6 +85,7 @@ export function InlineCodeEditor({ code, language, onChange, onLanguageChange, o
                 {/* Language selector */}
                 <div className="relative">
                     <button
+                        ref={langButtonRef}
                         type="button"
                         onClick={() => setShowLangDropdown(!showLangDropdown)}
                         className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-white/40 hover:text-white/70 transition-colors"
@@ -92,27 +95,15 @@ export function InlineCodeEditor({ code, language, onChange, onLanguageChange, o
                             <polyline points="6 9 12 15 18 9" />
                         </svg>
                     </button>
-                    {showLangDropdown && onLanguageChange && (
-                        <div className="absolute top-full left-0 mt-1 z-50 bg-[#1c2128] border border-white/10 rounded-lg shadow-xl p-1 min-w-36 max-h-48 overflow-y-auto">
-                            {POPULAR_LANGUAGES.map((lang) => (
-                                <button
-                                    key={lang}
-                                    type="button"
-                                    onClick={() => {
-                                        onLanguageChange(lang);
-                                        setShowLangDropdown(false);
-                                    }}
-                                    className={`w-full text-left px-2 py-1 text-xs rounded flex items-center justify-between gap-2 ${
-                                        lang === language ? 'bg-white/10 text-white' : 'text-white/60 hover:bg-white/5 hover:text-white'
-                                    }`}
-                                >
-                                    <span>{getDisplayName(lang)}</span>
-                                    {isExecutableLanguage(lang) && (
-                                        <span className="text-[8px] font-bold uppercase text-green-500/60">Run</span>
-                                    )}
-                                </button>
-                            ))}
-                        </div>
+                    {onLanguageChange && (
+                        <LanguageSelectDropdown
+                            triggerRef={langButtonRef}
+                            isOpen={showLangDropdown}
+                            onClose={() => setShowLangDropdown(false)}
+                            onSelect={onLanguageChange}
+                            currentLanguage={language}
+                            variant="dark"
+                        />
                     )}
                 </div>
                 {/* Run button */}
