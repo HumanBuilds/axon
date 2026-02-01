@@ -33,7 +33,7 @@ export async function createDeck(formData: FormData) {
         throw new Error(error.message);
     }
 
-    revalidatePath('/decks');
+    revalidatePath('/');
 }
 
 export async function updateDeckName(deckId: string, name: string) {
@@ -61,5 +61,5 @@ export async function updateDeckName(deckId: string, name: string) {
         throw new Error(error.message);
     }
 
-    revalidatePath('/decks');
+    revalidatePath('/');
 }

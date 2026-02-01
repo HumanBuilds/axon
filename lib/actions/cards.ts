@@ -39,5 +39,5 @@ export async function createCard(deckId: string, formData: FormData) {
         throw new Error(error.message);
     }
 
-    revalidatePath('/decks');
+    revalidatePath('/');
 }
