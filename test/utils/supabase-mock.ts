@@ -32,37 +32,37 @@ export function createMockQueryBuilder<T = any>(
   mockData: T[] | null = null,
   mockError: any = null
 ): MockQueryBuilder<T> {
-  const builder: MockQueryBuilder<T> = {
-    from: vi.fn().mockReturnValue(builder),
-    select: vi.fn().mockReturnValue(builder),
-    insert: vi.fn().mockReturnValue(builder),
-    update: vi.fn().mockReturnValue(builder),
-    delete: vi.fn().mockReturnValue(builder),
-    eq: vi.fn().mockReturnValue(builder),
-    neq: vi.fn().mockReturnValue(builder),
-    gt: vi.fn().mockReturnValue(builder),
-    gte: vi.fn().mockReturnValue(builder),
-    lt: vi.fn().mockReturnValue(builder),
-    lte: vi.fn().mockReturnValue(builder),
-    like: vi.fn().mockReturnValue(builder),
-    in: vi.fn().mockReturnValue(builder),
-    is: vi.fn().mockReturnValue(builder),
-    order: vi.fn().mockReturnValue(builder),
-    limit: vi.fn().mockReturnValue(builder),
-    single: vi.fn().mockResolvedValue({
-      data: mockData?.[0] ?? null,
-      error: mockError,
-    }),
-    maybeSingle: vi.fn().mockResolvedValue({
-      data: mockData?.[0] ?? null,
-      error: mockError,
-    }),
-    then: vi.fn().mockImplementation((resolve) => {
-      const result = { data: mockData, error: mockError };
-      resolve(result);
-      return Promise.resolve(result);
-    }),
-  };
+  const builder = {} as MockQueryBuilder<T>;
+
+  builder.from = vi.fn().mockReturnValue(builder);
+  builder.select = vi.fn().mockReturnValue(builder);
+  builder.insert = vi.fn().mockReturnValue(builder);
+  builder.update = vi.fn().mockReturnValue(builder);
+  builder.delete = vi.fn().mockReturnValue(builder);
+  builder.eq = vi.fn().mockReturnValue(builder);
+  builder.neq = vi.fn().mockReturnValue(builder);
+  builder.gt = vi.fn().mockReturnValue(builder);
+  builder.gte = vi.fn().mockReturnValue(builder);
+  builder.lt = vi.fn().mockReturnValue(builder);
+  builder.lte = vi.fn().mockReturnValue(builder);
+  builder.like = vi.fn().mockReturnValue(builder);
+  builder.in = vi.fn().mockReturnValue(builder);
+  builder.is = vi.fn().mockReturnValue(builder);
+  builder.order = vi.fn().mockReturnValue(builder);
+  builder.limit = vi.fn().mockReturnValue(builder);
+  builder.single = vi.fn().mockResolvedValue({
+    data: mockData?.[0] ?? null,
+    error: mockError,
+  });
+  builder.maybeSingle = vi.fn().mockResolvedValue({
+    data: mockData?.[0] ?? null,
+    error: mockError,
+  });
+  builder.then = vi.fn().mockImplementation((resolve) => {
+    const result = { data: mockData, error: mockError };
+    resolve(result);
+    return Promise.resolve(result);
+  });
 
   return builder;
 }
