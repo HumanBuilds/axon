@@ -1,14 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import type { ExecutionResult, ExecutionError } from '@/lib/code/executor';
+import { cleanErrorOutput, type ExecutionResult, type ExecutionError } from '@/lib/code/executor';
 
 export interface ExecutionOutputProps {
     result: ExecutionResult | ExecutionError;
-    cleanOutput: (output: string) => string;
 }
 
-export function ExecutionOutput({ result, cleanOutput }: ExecutionOutputProps) {
+export function ExecutionOutput({ result }: ExecutionOutputProps) {
     const [copied, setCopied] = useState(false);
 
     // Determine if this is an error (non-zero exit code or execution failure)
@@ -28,7 +27,7 @@ export function ExecutionOutput({ result, cleanOutput }: ExecutionOutputProps) {
     };
 
     const outputText = getOutputText();
-    const cleanedOutput = cleanOutput(outputText);
+    const cleanedOutput = cleanErrorOutput(outputText);
 
     const handleCopy = () => {
         navigator.clipboard.writeText(cleanedOutput);

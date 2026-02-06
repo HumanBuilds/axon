@@ -77,7 +77,6 @@ export function AddCardButton({ deckId }: AddCardButtonProps) {
                                         value={front}
                                         onChange={setFront}
                                         placeholder="What's the question? (Markdown supported)"
-                                        side="front"
                                         autoFocus={isOpen}
                                     />
                                 </div>
@@ -101,7 +100,6 @@ export function AddCardButton({ deckId }: AddCardButtonProps) {
                                         value={back}
                                         onChange={setBack}
                                         placeholder="And the answer is... (Markdown supported)"
-                                        side="back"
                                     />
                                 </div>
                             </div>

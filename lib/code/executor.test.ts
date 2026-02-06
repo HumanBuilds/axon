@@ -6,7 +6,7 @@
  */
 
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
-import { executeCode } from './executor';
+import { executeCode, cleanErrorOutput } from './executor';
 
 // Mock fetch globally
 global.fetch = vi.fn();
@@ -333,5 +333,36 @@ describe('Code Executor', () => {
       expect(result.signal).toBe('SIGKILL');
       expect(result.exitCode).toBe(137);
     }
+  });
+});
+
+describe('cleanErrorOutput', () => {
+  test('should replace full piston job paths', () => {
+    const input = '/piston/jobs/abc123-def456/file0.code: line 1: syntax error';
+    expect(cleanErrorOutput(input)).toBe('card: line 1: syntax error');
+  });
+
+  test('should replace piston paths with file extensions', () => {
+    const input = '/piston/jobs/abc123-def456/file0.code.py:3: SyntaxError';
+    expect(cleanErrorOutput(input)).toBe('card.py:3: SyntaxError');
+  });
+
+  test('should replace standalone file0.code references', () => {
+    const input = 'file0.code: error at line 5';
+    expect(cleanErrorOutput(input)).toBe('card: error at line 5');
+  });
+
+  test('should replace file0.code with extension', () => {
+    const input = 'file0.code.js:10: TypeError: undefined is not a function';
+    expect(cleanErrorOutput(input)).toBe('card.js:10: TypeError: undefined is not a function');
+  });
+
+  test('should handle multiple replacements in one string', () => {
+    const input = '/piston/jobs/aaa-bbb/file0.code.rs:1: error\nfile0.code.rs:2: note';
+    expect(cleanErrorOutput(input)).toBe('card.rs:1: error\ncard.rs:2: note');
+  });
+
+  test('should return empty string unchanged', () => {
+    expect(cleanErrorOutput('')).toBe('');
   });
 });

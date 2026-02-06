@@ -30,6 +30,15 @@ export interface ExecutionError {
 
 export type ExecutionResponse = ExecutionResult | ExecutionError;
 
+/**
+ * Clean piston paths and filenames from error output for display
+ */
+export function cleanErrorOutput(output: string): string {
+    return output
+        .replace(/\/piston\/jobs\/[a-f0-9-]+\/file0\.code(\.\w+)?/g, 'card$1')
+        .replace(/file0\.code(\.\w+)?/g, 'card$1');
+}
+
 interface PistonResponse {
     run: {
         stdout: string;
