@@ -15,7 +15,7 @@ export interface ContentSegment {
  */
 export function parseContent(content: string): ContentSegment[] {
     const segments: ContentSegment[] = [];
-    const codeBlockRegex = /```(\w*)\n([\s\S]*?)```/g;
+    const codeBlockRegex = /```(\w*)\n([\s\S]*?)```\n?/g;
 
     let lastIndex = 0;
     let match;
@@ -33,7 +33,7 @@ export function parseContent(content: string): ContentSegment[] {
         // Add the code block
         segments.push({
             type: 'code',
-            content: match[2],
+            content: match[2].replace(/\n$/, ''),
             language: match[1] || 'plaintext',
             startIndex: match.index,
             endIndex: match.index + match[0].length,
@@ -67,12 +67,21 @@ export function parseContent(content: string): ContentSegment[] {
  * Reconstruct markdown from segments
  */
 export function reconstructContent(segments: ContentSegment[]): string {
-    return segments.map(seg => {
+    let result = '';
+    for (const seg of segments) {
         if (seg.type === 'code') {
-            return `\`\`\`${seg.language || ''}\n${seg.content}\`\`\``;
+            // Ensure opening fence starts on its own line
+            if (result.length > 0 && !result.endsWith('\n')) {
+                result += '\n';
+            }
+            // Ensure closing fence is on its own line
+            const code = seg.content.endsWith('\n') ? seg.content : seg.content + '\n';
+            result += `\`\`\`${seg.language || ''}\n${code}\`\`\`\n`;
+        } else {
+            result += seg.content;
         }
-        return seg.content;
-    }).join('');
+    }
+    return result;
 }
 
 /**

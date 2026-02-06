@@ -9,12 +9,14 @@ interface StudySessionProps {
     initialCards: DatabaseCard[];
 }
 
+const REQUEUE_THRESHOLD_MS = 30 * 60 * 1000; // 30 minutes
+
 export function StudySession({ initialCards }: StudySessionProps) {
-    const [cards, setCards] = useState<DatabaseCard[]>(initialCards);
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const [queue, setQueue] = useState<DatabaseCard[]>(initialCards);
+    const [reviewedCount, setReviewedCount] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const currentCard = cards[currentIndex];
+    const currentCard = queue[0] ?? null;
 
     const intervals = useMemo(() => {
         if (!currentCard) return {} as { [key in Rating]: string };
@@ -38,8 +40,22 @@ export function StudySession({ initialCards }: StudySessionProps) {
             });
 
             if (response.ok) {
-                // Move to next card
-                setCurrentIndex(prev => prev + 1);
+                const { nextDue } = await response.json();
+
+                setQueue(prev => {
+                    const rest = prev.slice(1);
+
+                    // If nextDue is within 30 minutes, re-add to end of queue
+                    if (nextDue) {
+                        const msUntilDue = new Date(nextDue).getTime() - Date.now();
+                        if (msUntilDue < REQUEUE_THRESHOLD_MS) {
+                            return [...rest, currentCard];
+                        }
+                    }
+
+                    return rest;
+                });
+                setReviewedCount(prev => prev + 1);
             } else {
                 alert('Failed to save review');
             }
@@ -51,16 +67,31 @@ export function StudySession({ initialCards }: StudySessionProps) {
         }
     };
 
-    if (currentIndex >= cards.length) {
+    if (queue.length === 0 && reviewedCount > 0) {
         return (
             <div className="flex flex-col items-center justify-center h-96">
                 <h2 className="text-2xl font-bold mb-4">Session Complete!</h2>
                 <p className="opacity-70 mb-8">You've reviewed all cards for now.</p>
                 <button
                     className="btn btn-primary"
-                    onClick={() => window.location.href = '/decks'}
+                    onClick={() => window.location.href = '/'}
                 >
-                    Back to Decks
+                    Back to Dashboard
+                </button>
+            </div>
+        );
+    }
+
+    if (queue.length === 0) {
+        return (
+            <div className="flex flex-col items-center justify-center h-96">
+                <h2 className="text-2xl font-bold mb-4">No cards due!</h2>
+                <p className="opacity-70 mb-8">Check back later for more reviews.</p>
+                <button
+                    className="btn btn-primary"
+                    onClick={() => window.location.href = '/'}
+                >
+                    Back to Dashboard
                 </button>
             </div>
         );
@@ -70,14 +101,11 @@ export function StudySession({ initialCards }: StudySessionProps) {
         <div className="flex flex-col items-center gap-8 w-full max-w-4xl mx-auto py-8">
             <div className="w-full flex justify-between items-center px-4">
                 <span className="text-sm opacity-50">
-                    Card {currentIndex + 1} of {cards.length}
+                    {reviewedCount} reviewed · {queue.length} remaining
                 </span>
-                <div className="radial-progress text-primary" style={{ "--value": (currentIndex / cards.length) * 100, "--size": "3rem" } as any} role="progressbar">
-                    {Math.round((currentIndex / cards.length) * 100)}%
-                </div>
             </div>
 
-            <Flashcard front={currentCard.front} back={currentCard.back} />
+            <Flashcard key={`${currentCard!.id}-${reviewedCount}`} front={currentCard!.front} back={currentCard!.back} />
 
             <div className="w-full mt-4">
                 <ReviewButtons

@@ -1,23 +1,7 @@
 @import "tailwindcss";
+@import "./theme.css";
 @import "./typography.css";
 
-/* daisyUI theme configuration */
-@plugin "daisyui" {
-  themes: wireframe, dark;
-  defaultTheme: wireframe;
-}
-
-/* Custom theme variables */
-@theme {
-  --color-card-front: oklch(98% 0.01 240);
-  --color-card-back: oklch(95% 0.02 200);
-
-  /* UI Rounding */
-  --radius-selector: 1px;
-  --radius-field: 1px;
-  --radius-box: 1px;
-  --radius-button: 1px;
-}
 
 body {
   background-color: oklch(98% 0 0);
@@ -32,6 +16,7 @@ body {
     opacity: 0;
     transform: translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

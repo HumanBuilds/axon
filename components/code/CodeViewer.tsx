@@ -52,10 +52,10 @@ export function CodeViewer({
                     {getDisplayName(language)}
                 </span>
 
-                {/* Action bar - visible on hover */}
+                {/* Action bar - always visible on mobile/tablet, hover on desktop */}
                 <div
-                    className={`transition-opacity duration-150 ${
-                        isHovered ? 'opacity-100' : 'opacity-0'
+                    className={`transition-opacity duration-150 opacity-100 md:opacity-0 md:hover:opacity-100 ${
+                        isHovered ? 'md:opacity-100' : ''
                     }`}
                 >
                     <CodeActionBar

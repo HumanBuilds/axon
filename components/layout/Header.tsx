@@ -35,10 +35,10 @@ export function Header() {
     };
 
     return (
-        <header className="sticky top-0 z-50 w-full px-4 pt-4">
+        <header className="sticky top-0 z-50 w-full pt-4">
             <div className="max-w-5xl mx-auto w-full flex items-center justify-between px-6 bg-base-100/90 backdrop-blur-md border border-base-300 h-16 shadow-lg rounded-xl">
                 <div className="flex-1">
-                    <Link href="/" className="btn btn-ghost text-xl font-bold tracking-tighter hover:bg-transparent">
+                    <Link href="/" className="text-xl font-bold tracking-tighter">
                         AXON
                     </Link>
                 </div>

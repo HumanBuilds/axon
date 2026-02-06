@@ -40,7 +40,7 @@ export function Flashcard({ front, back }: FlashcardProps) {
                 <div className="card bg-base-100 shadow-xl absolute inset-0 backface-hidden overflow-auto">
                     <div className="card-body items-center justify-center">
                         <div data-code-block className="w-full max-w-full">
-                            <Markdown className="prose prose-lg axonic-reading-container max-w-none">
+                            <Markdown className="prose prose-lg axonic-reading-container flashcard-prose max-w-none">
                                 {front}
                             </Markdown>
                         </div>
@@ -59,7 +59,7 @@ export function Flashcard({ front, back }: FlashcardProps) {
                 >
                     <div className="card-body items-center justify-center">
                         <div data-code-block className="w-full max-w-full">
-                            <Markdown className="prose prose-lg axonic-reading-container max-w-none">
+                            <Markdown className="prose prose-lg axonic-reading-container flashcard-prose max-w-none">
                                 {back}
                             </Markdown>
                         </div>

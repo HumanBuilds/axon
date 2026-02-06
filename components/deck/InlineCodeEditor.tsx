@@ -112,7 +112,7 @@ export function InlineCodeEditor({ code, language, onChange, onLanguageChange, o
                         type="button"
                         onClick={onRun}
                         disabled={isRunning}
-                        className={`h-6 flex items-center gap-1 px-2 text-[10px] font-medium text-green-400/80 hover:text-green-400 hover:bg-white/5 rounded transition-all ${isRunning ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
+                        className={`h-6 flex items-center gap-1 px-2 text-[10px] font-medium text-green-400/80 hover:text-green-400 hover:bg-white/5 rounded transition-all ${isRunning ? 'opacity-100' : 'opacity-100 md:opacity-0 md:group-hover:opacity-100'}`}
                     >
                         {isRunning ? (
                             <>

@@ -14,6 +14,7 @@ interface CardContentEditorProps {
     onChange: (value: string) => void;
     placeholder?: string;
     side: 'front' | 'back';
+    autoFocus?: boolean;
 }
 
 interface InsertionPointProps {
@@ -25,7 +26,7 @@ function InsertionPoint({ onActivate }: InsertionPointProps) {
         <button
             type="button"
             onClick={onActivate}
-            className="w-full h-8 flex items-center justify-center group cursor-pointer relative opacity-0 hover:opacity-100 transition-opacity duration-150"
+            className="w-full h-8 flex items-center justify-center group cursor-pointer relative opacity-100 lg:opacity-0 lg:hover:opacity-100 transition-opacity duration-150"
         >
             {/* Line */}
             <div className="absolute inset-x-3 h-px bg-base-300" />
@@ -42,7 +43,7 @@ function InsertionPoint({ onActivate }: InsertionPointProps) {
     );
 }
 
-export function CardContentEditor({ value, onChange, placeholder }: CardContentEditorProps) {
+export function CardContentEditor({ value, onChange, placeholder, autoFocus = false }: CardContentEditorProps) {
     const [showLangPicker, setShowLangPicker] = useState(false);
     const codeButtonRef = useRef<HTMLButtonElement>(null);
     const [runningIndex, setRunningIndex] = useState<number | null>(null);
@@ -218,17 +219,18 @@ export function CardContentEditor({ value, onChange, placeholder }: CardContentE
                                         placeholder={index === 0 ? placeholder : undefined}
                                         value={segment.content}
                                         onChange={(e) => updateSegment(index, e.target.value)}
+                                        onFocus={() => setEditingIndex(index)}
                                         onBlur={(e) => {
                                             handleTextareaBlur(index, e.target.value);
                                             setEditingIndex(null);
                                         }}
                                         rows={Math.max(1, segment.content.split('\n').length || 1)}
-                                        autoFocus={editingIndex === index}
+                                        autoFocus={editingIndex === index || (autoFocus && index === 0)}
                                     />
                                 ) : (
                                     <div
                                         onClick={() => setEditingIndex(index)}
-                                        className="w-full min-h-[2.5rem] p-3 cursor-text hover:bg-base-200/30 transition-colors prose prose-sm max-w-none"
+                                        className="w-full min-h-[2.5rem] p-3 cursor-text hover:bg-base-200/30 transition-colors prose prose-sm flashcard-prose max-w-none"
                                     >
                                         <Markdown>{segment.content}</Markdown>
                                     </div>
@@ -245,7 +247,7 @@ export function CardContentEditor({ value, onChange, placeholder }: CardContentE
                                     <button
                                         type="button"
                                         onClick={() => deleteCodeBlock(index)}
-                                        className="absolute top-3 right-3 z-10 w-6 h-6 flex items-center justify-center rounded bg-white/5 text-white/40 hover:text-white hover:bg-white/10 opacity-0 group-hover:opacity-100 transition-all"
+                                        className="absolute top-3 right-3 z-10 w-6 h-6 flex items-center justify-center rounded bg-white/5 text-white/40 hover:text-white hover:bg-white/10 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all"
                                         title="Remove code block"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
