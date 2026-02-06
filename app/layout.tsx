@@ -21,11 +21,11 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet" />
       </head>
       <body className="antialiased min-h-screen flex flex-col">
-        <div className="flex flex-1 flex-col px-4">
+        <div className="flex flex-1 flex-col px-8 py-4">
 
           <Header />
-          <div className="flex-1 max-w-5xl px-4 mx-auto w-full bg-base-100 border border-base-300 shadow-sm flex flex-col mt-6 mb-4 rounded-2xl overflow-hidden">
-            <main className="flex-1 flex flex-col px-6">
+          <div className="max-w-5xl px-4 mx-auto w-full bg-base-100 border border-base-300  flex flex-col mt-5 rounded-lg overflow-hidden">
+            <main className="flex flex-col px-6">
               {children}
             </main>
             <footer className="footer footer-center py-8 bg-transparent text-base-content text-xs opacity-50">
