@@ -60,7 +60,8 @@
         letter-spacing: -0.04em;
         line-height: 1.1;
         text-transform: uppercase;
-        @apply mb-4 text-base-content;
+        @apply text-base-content;
+        margin: 0;
     }
 
     h1 {
@@ -83,7 +84,7 @@
     /* Body Paragraphs */
     p {
         line-height: 1.6;
-        margin-bottom: 1.25rem;
+        margin: 0;
     }
 
     /* Global UI Elements */

@@ -25,7 +25,7 @@ export function CardContentEditor({ value, onChange, placeholder, autoFocus = fa
     } = useCardContentEditor({ value, onChange });
 
     return (
-        <div className="border-2 border-base-300 overflow-hidden bg-base-100 focus-within:border-primary transition-colors">
+        <div className="border-2 border-base-300 overflow-hidden bg-base-100 h-full flex flex-col">
             {/* Toolbar */}
             <div className="flex items-center justify-end px-3 py-1.5 bg-base-200/50 border-b border-base-300">
                 <div className="relative">
@@ -53,7 +53,7 @@ export function CardContentEditor({ value, onChange, placeholder, autoFocus = fa
             </div>
 
             {/* Content area */}
-            <div>
+            <div className="flex-1">
                 {segments.map((segment, index) => (
                     <div key={`${segment.type}-${index}`}>
                         {segment.type === 'text' ? (
