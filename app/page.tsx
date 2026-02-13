@@ -48,7 +48,7 @@ export default async function Home() {
             <h2 className="text-3xl font-black tracking-tight">My Decks</h2>
             {decks && decks.length > 0 && <CreateDeckButton />}
           </div>
-          <p className="text-base-content/50 mt-1 max-w-lg leading-relaxed">
+          <p className="text-base-content/70 mt-1 mb-0 max-w-lg leading-relaxed">
             Manage and organize your flashcards with ease. Create sophisticated study paths through structured content.
           </p>
         </div>
@@ -66,7 +66,7 @@ export default async function Home() {
             </div>
             <div className="max-w-md text-center">
               <h3 className="text-xl font-bold tracking-tight mb-3">Your library is empty.</h3>
-              <p className="text-base-content/50 leading-relaxed mb-8">
+              <p className="text-base-content/70 leading-relaxed mb-8">
                 Start by creating a deck of flashcards. You can organize your study materials into structured content for better focus and systematic learning.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

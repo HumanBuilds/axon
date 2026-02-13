@@ -48,7 +48,6 @@ export function Header() {
                         <div className="w-20 h-8 bg-base-300 animate-pulse"></div>
                     ) : user ? (
                         <div className="flex items-center gap-2">
-                            <Link href="/" className="btn btn-ghost btn-sm">Decks</Link>
                             <div className="dropdown dropdown-end">
                                 <div tabIndex={0} role="button" className="btn btn-ghost btn-square avatar">
                                     <div className="w-10 bg-neutral text-neutral-content flex items-center justify-center">
