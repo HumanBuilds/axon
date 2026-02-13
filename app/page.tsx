@@ -46,7 +46,6 @@ export default async function Home() {
         <div className="border-b border-base-300 pb-6 mb-10">
           <div className="flex items-center justify-between gap-4">
             <h2 className="text-3xl font-black tracking-tight">My Decks</h2>
-            {decks && decks.length > 0 && <CreateDeckButton />}
           </div>
           <p className="text-base-content/70 mt-1 mb-0 max-w-lg leading-relaxed">
             Manage and organize your flashcards with ease. Create sophisticated study paths through structured content.
@@ -92,6 +91,12 @@ export default async function Home() {
                 />
               </div>
             ))}
+            <div className="w-full max-w-sm">
+              <CreateDeckButton className="w-full h-full min-h-[160px] border-2 border-dashed border-primary bg-transparent text-primary hover:border-solid hover:shadow-axon transition-all flex flex-col items-center justify-center gap-2">
+                <img src="/assets/plus.svg" alt="" className="w-6 h-6" />
+                <span className="text-sm font-bold">Create New Deck</span>
+              </CreateDeckButton>
+            </div>
           </div>
         )}
       </main>

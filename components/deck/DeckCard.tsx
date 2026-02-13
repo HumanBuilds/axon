@@ -78,12 +78,12 @@ export function DeckCard({ id, name, cardCount, dueCount, color = '#6366f1' }: D
     };
 
     return (
-        <div className="card bg-base-100 shadow-sm hover:shadow-axon transition-shadow border-2 border-neutral overflow-hidden">
+        <div className="card bg-base-100 shadow-sm hover:shadow-axon transition-shadow border-2 border-neutral overflow-hidden rounded-none min-h-[160px]">
             <div
                 className="h-2 w-full"
                 style={{ backgroundColor: color }}
             />
-            <div className="card-body">
+            <div className="card-body flex-1 justify-between">
                 <div
                     className="flex justify-between items-start mb-4 gap-4"
                     onMouseEnter={() => setIsHovering(true)}
