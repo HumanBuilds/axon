@@ -64,19 +64,7 @@ export function AddCardButton({ deckId }: AddCardButtonProps) {
                 className="max-w-2xl"
                 footer={
                     <>
-                        <div className="flex items-center gap-2 text-[10px] font-mono text-base-content/70 uppercase font-bold">
-                            <kbd className="text-xs">Ctrl</kbd>
-                            <span>+ Enter to save</span>
-                        </div>
-                        <div className="flex gap-3">
-                            <button
-                                type="button"
-                                onClick={handleClose}
-                                disabled={loading}
-                                className="btn-primary-ghost"
-                            >
-                                Discard
-                            </button>
+                        <div className="flex gap-3 ml-auto">
                             <button
                                 type="submit"
                                 form="add-card-form"
