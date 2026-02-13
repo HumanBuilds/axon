@@ -1,7 +1,58 @@
-/* daisyUI theme configuration */
-@plugin "daisyui" {
-  themes: wireframe, dark;
-  defaultTheme: wireframe;
+/* Load DaisyUI base plugin (components, utilities) */
+@plugin "daisyui";
+
+/* Custom themes */
+@plugin "daisyui/theme" {
+  name: "axonLight";
+  default: true;
+  color-scheme: light;
+  primary: #3211d4;
+  primary-content: #ffffff;
+  secondary: #6366f1;
+  secondary-content: #ffffff;
+  accent: #f59e0b;
+  accent-content: #000000;
+  neutral: #1a1a2e;
+  neutral-content: #ffffff;
+  base-100: #f6f6f8;
+  base-200: #ececf0;
+  base-300: #d5d5dc;
+  base-content: #1a1a2e;
+  info: #3b82f6;
+  success: #22c55e;
+  warning: #f59e0b;
+  error: #ef4444;
+  --rounded-box: 0rem;
+  --rounded-btn: 0rem;
+  --rounded-badge: 0rem;
+  --rounded-selector: 0rem;
+  --rounded-field: 0rem;
+}
+
+@plugin "daisyui/theme" {
+  name: "axonDark";
+  color-scheme: dark;
+  primary: #6366f1;
+  primary-content: #ffffff;
+  secondary: #818cf8;
+  secondary-content: #ffffff;
+  accent: #f59e0b;
+  accent-content: #000000;
+  neutral: #e5e5ea;
+  neutral-content: #1a1a2e;
+  base-100: #0f0f1a;
+  base-200: #1a1a2e;
+  base-300: #2a2a40;
+  base-content: #e5e5ea;
+  info: #3b82f6;
+  success: #22c55e;
+  warning: #f59e0b;
+  error: #ef4444;
+  --rounded-box: 0rem;
+  --rounded-btn: 0rem;
+  --rounded-badge: 0rem;
+  --rounded-selector: 0rem;
+  --rounded-field: 0rem;
 }
 
 /* Custom theme variables */
@@ -9,9 +60,13 @@
   --color-card-front: oklch(98% 0.01 240);
   --color-card-back: oklch(95% 0.02 200);
 
-  /* UI Rounding */
-  --radius-selector: 1px;
-  --radius-field: 1px;
-  --radius-box: 1px;
-  --radius-button: 1px;
+  /* Neo-brutalist offset shadows */
+  --shadow-axon: 4px 4px 0px #3211d4;
+  --shadow-axon-white: 4px 4px 0px #f6f6f8;
+
+  /* UI Rounding - all zero for sharp corners */
+  --radius-selector: 0px;
+  --radius-field: 0px;
+  --radius-box: 0px;
+  --radius-button: 0px;
 }

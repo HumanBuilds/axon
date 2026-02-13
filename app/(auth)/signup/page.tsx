@@ -35,7 +35,7 @@ export default function SignupPage() {
     if (success) {
         return (
             <div className="flex-1 flex flex-col items-center justify-center py-12">
-                <div className="card w-full max-w-md bg-base-100 shadow-xl text-center">
+                <div className="card w-full max-w-md bg-base-100 shadow-axon border-2 border-neutral text-center">
                     <div className="card-body">
                         <h2 className="text-3xl font-black mb-4">Check your email!</h2>
                         <p className="opacity-60 mb-8">
@@ -52,7 +52,7 @@ export default function SignupPage() {
 
     return (
         <div className="flex-1 flex flex-col items-center justify-center py-12">
-            <div className="card w-full max-w-md bg-base-100 shadow-xl">
+            <div className="card w-full max-w-md bg-base-100 shadow-axon border-2 border-neutral">
                 <div className="card-body">
                     <div className="flex flex-col items-center mb-6">
                         <Link href="/" className="text-4xl font-black tracking-tighter mb-2">AXON</Link>

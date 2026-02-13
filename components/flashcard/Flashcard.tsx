@@ -37,7 +37,7 @@ export function Flashcard({ front, back }: FlashcardProps) {
                 style={{ transformStyle: 'preserve-3d' }}
             >
                 {/* Front */}
-                <div className="card bg-base-100 shadow-xl absolute inset-0 backface-hidden overflow-auto">
+                <div className="card bg-base-100 shadow-axon border-2 border-neutral absolute inset-0 backface-hidden overflow-auto">
                     <div className="card-body items-center justify-center">
                         <div data-code-block className="w-full max-w-full">
                             <Markdown className="prose prose-lg axonic-reading-container flashcard-prose max-w-none">
@@ -54,7 +54,7 @@ export function Flashcard({ front, back }: FlashcardProps) {
 
                 {/* Back */}
                 <div
-                    className="card bg-base-200 shadow-xl absolute inset-0 backface-hidden overflow-auto"
+                    className="card bg-base-200 shadow-axon border-2 border-neutral absolute inset-0 backface-hidden overflow-auto"
                     style={{ transform: 'rotateY(180deg)' }}
                 >
                     <div className="card-body items-center justify-center">

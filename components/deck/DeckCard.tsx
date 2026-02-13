@@ -78,7 +78,7 @@ export function DeckCard({ id, name, cardCount, dueCount, color = '#6366f1' }: D
     };
 
     return (
-        <div className="card bg-base-100 shadow-sm hover:shadow-md transition-shadow border border-base-300 overflow-hidden">
+        <div className="card bg-base-100 shadow-sm hover:shadow-axon transition-shadow border-2 border-neutral overflow-hidden">
             <div
                 className="h-2 w-full"
                 style={{ backgroundColor: color }}

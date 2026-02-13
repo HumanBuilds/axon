@@ -36,7 +36,7 @@ export function Header() {
 
     return (
         <header className="sticky top-0 z-50 w-full pt-4">
-            <div className="max-w-5xl mx-auto w-full flex items-center justify-between px-6 bg-base-100/90 backdrop-blur-md border border-base-300 h-16  rounded-lg">
+            <div className="max-w-5xl mx-auto w-full flex items-center justify-between px-6 bg-base-100/90 backdrop-blur-md border-2 border-neutral h-16">
                 <div className="flex-1">
                     <Link href="/" className="text-xl font-bold tracking-tighter">
                         AXON
@@ -44,17 +44,17 @@ export function Header() {
                 </div>
                 <div className="flex-none flex items-center gap-2">
                     {loading ? (
-                        <div className="w-20 h-8 bg-base-300 animate-pulse rounded"></div>
+                        <div className="w-20 h-8 bg-base-300 animate-pulse"></div>
                     ) : user ? (
                         <div className="flex items-center gap-2">
                             <Link href="/" className="btn btn-ghost btn-sm">Decks</Link>
                             <div className="dropdown dropdown-end">
                                 <div tabIndex={0} role="button" className="btn btn-ghost btn-square avatar">
-                                    <div className="w-10 rounded bg-neutral text-neutral-content flex items-center justify-center">
+                                    <div className="w-10 bg-neutral text-neutral-content flex items-center justify-center">
                                         <span>{user.email?.[0].toUpperCase()}</span>
                                     </div>
                                 </div>
-                                <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-lg border border-base-300 w-52">
+                                <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 border-2 border-neutral w-52">
                                     <li className="menu-title px-4 py-2 opacity-50 text-xs uppercase font-bold tracking-widest">{user.email}</li>
                                     <li><a>Profile</a></li>
                                     <li><a>Settings</a></li>

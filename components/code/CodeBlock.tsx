@@ -72,7 +72,7 @@ export function CodeBlock({
     }, []);
 
     return (
-        <div data-code-block className={`rounded-xl overflow-hidden border border-base-300 shadow-xl bg-[#0d1117] ${compact ? 'my-2' : 'my-6'}`}>
+        <div data-code-block className={`overflow-hidden border-2 border-neutral shadow-axon bg-[#0d1117] ${compact ? 'my-2' : 'my-6'}`}>
             {state === 'editing' ? (
                 <CodeEditor
                     code={editCode}

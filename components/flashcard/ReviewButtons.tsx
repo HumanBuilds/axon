@@ -21,7 +21,7 @@ export function ReviewButtons({ intervals, onRate, disabled }: ReviewButtonsProp
             {buttons.map(({ rating, label }) => (
                 <button
                     key={rating}
-                    className="group flex flex-col items-center justify-center py-2 px-6 rounded-xl border border-base-300 bg-base-100 hover:bg-base-200 transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
+                    className="group flex flex-col items-center justify-center py-2 px-6 border-2 border-neutral bg-base-100 hover:bg-base-200 transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
                     onClick={(e) => {
                         e.stopPropagation();
                         onRate(rating);

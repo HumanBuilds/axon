@@ -52,7 +52,7 @@ export function ExecutionOutput({ result }: ExecutionOutputProps) {
                 <button
                     type="button"
                     onClick={handleCopy}
-                    className="shrink-0 p-1 rounded hover:bg-white/10 transition-colors"
+                    className="shrink-0 p-1 hover:bg-white/10 transition-colors"
                     title="Copy output"
                 >
                     {copied ? (

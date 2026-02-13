@@ -16,7 +16,7 @@ function InsertionPoint({ onActivate }: InsertionPointProps) {
             <div className="absolute inset-x-3 h-px bg-base-300" />
             {/* Plus icon */}
             <div className="z-10 bg-base-100 px-2">
-                <div className="w-5 h-5 rounded-full border-2 border-base-300 flex items-center justify-center transition-transform duration-150 group-hover:scale-110">
+                <div className="w-5 h-5 border-2 border-base-300 flex items-center justify-center transition-transform duration-150 group-hover:scale-110">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-base-content/50">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>

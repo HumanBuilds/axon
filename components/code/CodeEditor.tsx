@@ -149,7 +149,7 @@ export function CodeEditor({
                             e.stopPropagation();
                             onCancel();
                         }}
-                        className="p-1 rounded hover:bg-white/10 transition-colors"
+                        className="p-1 hover:bg-white/10 transition-colors"
                         title="Cancel (Esc)"
                     >
                         <svg
@@ -170,7 +170,7 @@ export function CodeEditor({
                             e.stopPropagation();
                             formatAndSave();
                         }}
-                        className="p-1 rounded hover:bg-white/10 transition-colors"
+                        className="p-1 hover:bg-white/10 transition-colors"
                         title="Save (Cmd+S)"
                     >
                         <svg

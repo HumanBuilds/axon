@@ -14,17 +14,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="wireframe">
+    <html lang="en" data-theme="axonLight">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
       </head>
       <body className="antialiased min-h-screen flex flex-col">
         <div className="flex flex-1 flex-col px-8 py-4">
 
           <Header />
-          <div className="max-w-5xl px-4 mx-auto w-full bg-base-100 border border-base-300  flex flex-col mt-5 rounded-lg overflow-hidden">
+          <div className="max-w-5xl px-4 mx-auto w-full bg-base-100 border-2 border-neutral shadow-axon flex flex-col mt-5 overflow-hidden">
             <main className="flex flex-col px-6">
               {children}
             </main>

@@ -41,7 +41,7 @@ export function CodeActionBar({
             {/* Copy button */}
             <button
                 onClick={handleCopy}
-                className="p-1.5 rounded hover:bg-white/10 transition-colors"
+                className="p-1.5 hover:bg-white/10 transition-colors"
                 title="Copy code"
             >
                 {copied ? (
@@ -76,7 +76,7 @@ export function CodeActionBar({
             {canEdit && (
                 <button
                     onClick={handleEdit}
-                    className="p-1.5 rounded hover:bg-white/10 transition-colors"
+                    className="p-1.5 hover:bg-white/10 transition-colors"
                     title="Edit code"
                 >
                     <svg
@@ -98,7 +98,7 @@ export function CodeActionBar({
             {canRun && (
                 <button
                     onClick={handleRun}
-                    className="p-1.5 rounded hover:bg-white/10 transition-colors"
+                    className="p-1.5 hover:bg-white/10 transition-colors"
                     title="Run code"
                 >
                     <svg

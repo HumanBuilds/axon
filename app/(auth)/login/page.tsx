@@ -34,7 +34,7 @@ export default function LoginPage() {
 
     return (
         <div className="flex-1 flex flex-col items-center justify-center py-12">
-            <div className="card w-full max-w-md bg-base-100 shadow-xl">
+            <div className="card w-full max-w-md bg-base-100 shadow-axon border-2 border-neutral">
                 <div className="card-body">
                     <div className="flex flex-col items-center mb-6">
                         <Link href="/" className="text-4xl font-black tracking-tighter mb-2">AXON</Link>

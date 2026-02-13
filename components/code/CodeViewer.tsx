@@ -77,9 +77,9 @@ export function CodeViewer({
                     />
                 ) : (
                     <div className="animate-pulse">
-                        <div className="h-4 bg-white/10 rounded w-3/4 mb-2"></div>
-                        <div className="h-4 bg-white/10 rounded w-1/2 mb-2"></div>
-                        <div className="h-4 bg-white/10 rounded w-5/6"></div>
+                        <div className="h-4 bg-white/10 w-3/4 mb-2"></div>
+                        <div className="h-4 bg-white/10 w-1/2 mb-2"></div>
+                        <div className="h-4 bg-white/10 w-5/6"></div>
                     </div>
                 )}
             </div>

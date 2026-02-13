@@ -16,13 +16,13 @@ interface LanguageSelectDropdownProps {
 
 const variantStyles: Record<Variant, { container: string; item: string; itemActive: string; badge: string }> = {
     dark: {
-        container: 'bg-[#1c2128] border border-white/10 rounded-lg shadow-xl p-1 min-w-36 overflow-hidden pb-3',
+        container: 'bg-[#1c2128] border border-white/10 shadow-xl p-1 min-w-36 overflow-hidden pb-3',
         item: 'text-white/60 hover:bg-white/5 hover:text-white',
         itemActive: 'bg-white/10 text-white',
         badge: 'text-[8px] font-bold uppercase text-green-500/60',
     },
     light: {
-        container: 'bg-base-100 border border-base-300 rounded-lg shadow-xl p-2 min-w-48 overflow-hidden pb-3',
+        container: 'bg-base-100 border-2 border-base-300 shadow-axon p-2 min-w-48 overflow-hidden pb-3',
         item: 'hover:bg-base-200',
         itemActive: 'bg-base-200',
         badge: 'text-[9px] font-bold uppercase tracking-wider text-green-500 opacity-60',
@@ -62,7 +62,7 @@ export function LanguageSelectDropdown({
                         key={lang}
                         type="button"
                         onClick={() => handleSelect(lang)}
-                        className={`w-full text-left px-2 rounded flex items-center justify-between gap-2 ${variant === 'light' ? 'py-1.5 text-sm' : 'py-1 text-xs'
+                        className={`w-full text-left px-2 flex items-center justify-between gap-2 ${variant === 'light' ? 'py-1.5 text-sm' : 'py-1 text-xs'
                             } ${lang === currentLanguage ? styles.itemActive : styles.item}`}
                     >
                         <span>{getDisplayName(lang)}</span>

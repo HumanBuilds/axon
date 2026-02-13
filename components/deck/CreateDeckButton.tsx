@@ -42,7 +42,7 @@ export function CreateDeckButton({ className, children }: CreateDeckButtonProps)
 
             {/* Modal */}
             <div className={`modal ${isOpen ? 'modal-open' : ''}`}>
-                <div className="modal-box bg-base-100 border border-base-300">
+                <div className="modal-box bg-base-100 border-2 border-neutral">
                     <h3 className="font-black text-2xl tracking-tight mb-6">Create New Deck</h3>
 
                     <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">

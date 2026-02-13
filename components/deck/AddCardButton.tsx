@@ -63,7 +63,7 @@ export function AddCardButton({ deckId }: AddCardButtonProps) {
             {/* Modal */}
             <div className={`modal ${isOpen ? 'modal-open' : ''}`} onClick={(e) => e.stopPropagation()}>
                 {isOpen && (
-                    <div className="modal-box bg-base-100 border border-base-300 max-w-5xl max-h-[90vh] overflow-y-auto">
+                    <div className="modal-box bg-base-100 border-2 border-neutral max-w-5xl max-h-[90vh] overflow-y-auto">
                         <h3 className="font-black text-2xl tracking-tight mb-8">Add New Card</h3>
 
                         <form ref={formRef} onSubmit={handleSubmit}>
@@ -84,7 +84,7 @@ export function AddCardButton({ deckId }: AddCardButtonProps) {
                                 {/* Divider */}
                                 <div className="hidden md:flex flex-col items-center justify-center">
                                     <div className="w-[1px] h-full bg-base-300 relative">
-                                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-base-100 p-2 border border-base-300 rounded-sm">
+                                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-base-100 p-2 border-2 border-neutral">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-40"><path d="m9 18 6-6-6-6" /></svg>
                                         </div>
                                     </div>

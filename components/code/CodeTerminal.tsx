@@ -36,7 +36,7 @@ export function CodeTerminal({ result, isLoading, onClose }: CodeTerminalProps) 
                     {/* Exit code badge */}
                     {result && result.success && (
                         <span
-                            className={`px-1.5 py-0.5 text-[10px] font-medium rounded ${
+                            className={`px-1.5 py-0.5 text-[10px] font-medium ${
                                 result.exitCode === 0
                                     ? 'bg-green-500/20 text-green-400'
                                     : 'bg-red-500/20 text-red-400'
@@ -48,7 +48,7 @@ export function CodeTerminal({ result, isLoading, onClose }: CodeTerminalProps) 
 
                     {/* Error badge */}
                     {result && !result.success && (
-                        <span className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-red-500/20 text-red-400">
+                        <span className="px-1.5 py-0.5 text-[10px] font-medium bg-red-500/20 text-red-400">
                             {result.errorType}
                         </span>
                     )}
@@ -56,7 +56,7 @@ export function CodeTerminal({ result, isLoading, onClose }: CodeTerminalProps) 
 
                 <button
                     onClick={handleClose}
-                    className="p-1 rounded hover:bg-white/10 transition-colors"
+                    className="p-1 hover:bg-white/10 transition-colors"
                     title="Close terminal"
                 >
                     <svg

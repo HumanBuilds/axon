@@ -1,6 +1,6 @@
 @theme {
     /* --- Fonts --- */
-    --font-header: "Aeonik", "Inter", ui-sans-serif;
+    --font-header: "Inter", ui-sans-serif;
     --font-body: "Inter", ui-sans-serif;
     --font-mono: "JetBrains Mono", monospace;
 
@@ -57,14 +57,15 @@
     h4 {
         font-family: var(--font-header);
         font-weight: var(--font-weight-bold);
-        letter-spacing: -0.02em;
+        letter-spacing: -0.04em;
         line-height: 1.1;
+        text-transform: uppercase;
         @apply mb-4 text-base-content;
     }
 
     h1 {
         font-size: var(--font-size-4xl);
-        font-weight: var(--font-weight-black);
+        font-weight: 900;
     }
 
     h2 {
@@ -89,8 +90,9 @@
     button,
     .btn {
         font-family: var(--font-header);
-        font-weight: var(--font-weight-medium);
-        letter-spacing: 0.01em;
+        font-weight: var(--font-weight-semibold);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
     }
 
     code,
@@ -116,7 +118,7 @@
         }
 
         & blockquote {
-            @apply border-l-4 border-primary italic font-medium bg-base-200/30 p-4 rounded-r-lg;
+            @apply border-l-4 border-primary italic font-medium bg-base-200/30 p-4;
         }
     }
 

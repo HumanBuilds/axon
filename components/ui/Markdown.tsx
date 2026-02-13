@@ -22,7 +22,7 @@ function MarkdownCodeBlock({ children, className, ...props }: any) {
 
     return (
         <code
-            className="bg-base-200 px-1.5 py-0.5 rounded font-mono text-sm text-secondary border border-base-300/50"
+            className="bg-base-200 px-1.5 py-0.5 font-mono text-sm text-secondary border border-base-300/50"
             {...props}
         >
             {children}

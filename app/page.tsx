@@ -52,7 +52,7 @@ export default async function Home() {
       </div>
 
       {(!decks || decks.length === 0) ? (
-        <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-base-300 rounded-lg bg-base-200/30">
+        <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-base-300 bg-base-200/30">
           <p className="text-xl opacity-50 mb-8 font-medium">You don't have any decks yet.</p>
           <CreateDeckButton className="btn btn-primary px-10">
             Create your first deck
