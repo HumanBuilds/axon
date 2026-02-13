@@ -22,19 +22,15 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
       </head>
       <body className="antialiased min-h-screen flex flex-col">
-        <div className="flex flex-1 flex-col px-8 py-4">
-
-          <Header />
-          <div className="max-w-5xl px-4 mx-auto w-full bg-base-100 border-2 border-neutral shadow-axon flex flex-col mt-5 overflow-hidden">
-            <main className="flex flex-col px-6">
-              {children}
-            </main>
-            <footer className="footer footer-center py-8 bg-transparent text-base-content text-xs opacity-50">
-              <p>Axon Flashcards © 2026 — Optimized by FSRS</p>
-            </footer>
-          </div>
+        <Header />
+        <div className="flex-1 flex flex-col">
+          {children}
         </div>
-
+        <footer className="w-full border-t border-base-300 bg-base-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <p className="text-center text-xs opacity-50 m-0">Axon Flashcards © 2026 — Optimized by FSRS</p>
+          </div>
+        </footer>
       </body>
     </html>
   );
