@@ -86,6 +86,22 @@ Use `@/*` for imports from project root (configured in tsconfig.json).
 - **Test files**: Co-located with source as `*.test.ts` / `*.test.tsx`
 - **Patterns**: Mock heavy deps (Monaco, Markdown) with `vi.mock()` stubs; use `makeProps()` factories for component tests; use `renderHook()` for hook tests
 
+## Agent Usage
+
+Always use the available specialized agents (via the Task tool) when their purpose matches the work being done. Do not skip agents to save time. Specifically:
+
+- **code-review** - Run after implementing features, fixing bugs, or refactoring code
+- **test-strategist** - Run after significant code changes to write or improve tests
+- **architecture-guardian** - Run when changes touch module boundaries, add new files/directories, or modify imports across layers
+- **accessibility-auditor** - Run after building or modifying interactive UI components
+- **component-architect** - Run when creating new React components, refactoring large components, or extracting shared patterns
+- **database-guardian** - Run when working on schema changes, migrations, RLS policies, or server actions that touch the database
+- **ui-style-enforcer** - Run after creating or modifying component styling to ensure visual consistency
+- **perf-optimizer** - Run when investigating or resolving performance issues
+- **session-retrospective** - Run at the end of significant work sessions
+
+Run agents in parallel when multiple are relevant and independent. For example, after building a new UI feature, run code-review, test-strategist, and accessibility-auditor concurrently.
+
 ## Environment Variables
 
 Required in `.env.local`:
