@@ -63,7 +63,7 @@ export function TextSegment({
     if (editingIndex === index || isEmptyContent(segment.content)) {
         return (
             <textarea
-                className="w-full resize-none font-mono text-sm p-3 bg-transparent focus:outline-none"
+                className="w-full flex-1 resize-none font-mono text-sm p-3 bg-transparent focus:outline-none"
                 placeholder={index === 0 ? placeholder : undefined}
                 value={segment.content}
                 onChange={(e) => updateSegment(index, e.target.value)}
@@ -72,7 +72,6 @@ export function TextSegment({
                     handleTextareaBlur(index, e.target.value);
                     setEditingIndex(null);
                 }}
-                rows={Math.max(1, segment.content.split('\n').length || 1)}
                 autoFocus={editingIndex === index || (autoFocus && index === 0)}
             />
         );
@@ -81,7 +80,7 @@ export function TextSegment({
     return (
         <div
             onClick={() => setEditingIndex(index)}
-            className="w-full min-h-[2.5rem] p-3 cursor-text hover:bg-base-200/30 transition-colors prose prose-sm flashcard-prose max-w-none"
+            className="w-full flex-1 min-h-[2.5rem] p-3 cursor-text hover:bg-base-200/30 transition-colors prose prose-sm flashcard-prose max-w-none"
         >
             <Markdown>{segment.content}</Markdown>
         </div>

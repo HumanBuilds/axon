@@ -64,7 +64,7 @@ export function AddCardButton({ deckId }: AddCardButtonProps) {
                 className="max-w-2xl"
                 footer={
                     <>
-                        <div className="flex items-center gap-2 text-[10px] font-mono text-primary/40 uppercase font-bold">
+                        <div className="flex items-center gap-2 text-[10px] font-mono text-base-content/70 uppercase font-bold">
                             <kbd className="text-xs">Ctrl</kbd>
                             <span>+ Enter to save</span>
                         </div>
@@ -94,10 +94,10 @@ export function AddCardButton({ deckId }: AddCardButtonProps) {
                         {/* Front Side */}
                         <div className="space-y-2">
                             <div className="flex justify-between items-center">
-                                <label className="text-xs font-bold uppercase tracking-widest text-primary/60">Front (Question)</label>
-                                <span className="text-[10px] font-mono text-primary/40">Markdown Supported</span>
+                                <label className="text-xs font-bold uppercase tracking-widest text-primary">Front (Question)</label>
+                                <span className="text-[10px] font-mono text-primary">Markdown Supported</span>
                             </div>
-                            <div className="min-h-[200px]">
+                            <div className="h-[200px]">
                                 <CardContentEditor
                                     value={front}
                                     onChange={setFront}
@@ -110,10 +110,10 @@ export function AddCardButton({ deckId }: AddCardButtonProps) {
                         {/* Back Side */}
                         <div className="space-y-2">
                             <div className="flex justify-between items-center">
-                                <label className="text-xs font-bold uppercase tracking-widest text-primary/60">Back (Answer)</label>
-                                <span className="text-[10px] font-mono text-primary/40">Markdown Supported</span>
+                                <label className="text-xs font-bold uppercase tracking-widest text-primary">Back (Answer)</label>
+                                <span className="text-[10px] font-mono text-primary">Markdown Supported</span>
                             </div>
-                            <div className="min-h-[200px]">
+                            <div className="h-[200px]">
                                 <CardContentEditor
                                     value={back}
                                     onChange={setBack}

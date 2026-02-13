@@ -53,9 +53,9 @@ export function CardContentEditor({ value, onChange, placeholder, autoFocus = fa
             </div>
 
             {/* Content area */}
-            <div className="flex-1">
+            <div className="flex-1 flex flex-col min-h-0">
                 {segments.map((segment, index) => (
-                    <div key={`${segment.type}-${index}`}>
+                    <div key={`${segment.type}-${index}`} className="flex-1 flex flex-col min-h-0">
                         {segment.type === 'text' ? (
                             <TextSegment
                                 segment={segment}

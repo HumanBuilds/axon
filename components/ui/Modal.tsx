@@ -37,7 +37,7 @@ export function Modal({
 
                     {/* Container */}
                     <div
-                        className={`relative w-full max-w-2xl bg-base-100 border-[3px] border-primary shadow-[8px_8px_0px_0px_rgba(50,17,212,0.2)] flex flex-col ${className ?? ''}`}
+                        className={`relative w-full max-w-2xl bg-base-100 border-[3px] border-black shadow-[8px_8px_0px_0px_rgba(50,17,212,0.2)] flex flex-col ${className ?? ''}`}
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* Header */}
