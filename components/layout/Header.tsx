@@ -35,13 +35,14 @@ export function Header() {
     };
 
     return (
-        <header className="sticky top-0 z-50 w-full pt-4">
-            <div className="max-w-5xl mx-auto w-full flex items-center justify-between px-6 bg-base-100/90 backdrop-blur-md border-2 border-neutral h-16">
-                <div className="flex-1">
-                    <Link href="/" className="text-xl font-bold tracking-tighter">
-                        AXON
-                    </Link>
-                </div>
+        <header className="sticky top-0 z-50 w-full bg-base-100 border-b-2 border-neutral">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+                <Link href="/" className="flex items-center gap-2.5">
+                    <img src="/assets/logo.svg" alt="Axon logo" className="w-8 h-8" />
+                    <span className="text-xl font-bold tracking-tight text-primary">
+                        Axon
+                    </span>
+                </Link>
                 <div className="flex-none flex items-center gap-2">
                     {loading ? (
                         <div className="w-20 h-8 bg-base-300 animate-pulse"></div>

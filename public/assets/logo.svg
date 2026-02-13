@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Central node -->
+  <circle cx="100" cy="100" r="18" fill="url(#gradient)"/>
+
+  <!-- Axon branches (left) -->
+  <path d="M 82 100 Q 60 100 45 85" stroke="url(#gradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M 82 100 Q 60 100 45 115" stroke="url(#gradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <circle cx="45" cy="85" r="10" fill="url(#gradient)"/>
+  <circle cx="45" cy="115" r="10" fill="url(#gradient)"/>
+
+  <!-- Axon branches (right) -->
+  <path d="M 118 100 Q 140 100 155 85" stroke="url(#gradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M 118 100 Q 140 100 155 115" stroke="url(#gradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <circle cx="155" cy="85" r="10" fill="url(#gradient)"/>
+  <circle cx="155" cy="115" r="10" fill="url(#gradient)"/>
+
+  <!-- Axon branches (top) -->
+  <path d="M 100 82 Q 100 60 85 45" stroke="url(#gradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M 100 82 Q 100 60 115 45" stroke="url(#gradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <circle cx="85" cy="45" r="10" fill="url(#gradient)"/>
+  <circle cx="115" cy="45" r="10" fill="url(#gradient)"/>
+
+  <!-- Axon branches (bottom) -->
+  <path d="M 100 118 Q 100 140 85 155" stroke="url(#gradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M 100 118 Q 100 140 115 155" stroke="url(#gradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <circle cx="85" cy="155" r="10" fill="url(#gradient)"/>
+  <circle cx="115" cy="155" r="10" fill="url(#gradient)"/>
+
+  <!-- Pulse effect on central node -->
+  <circle cx="100" cy="100" r="18" fill="none" stroke="url(#gradient)" stroke-width="2" opacity="0.3">
+    <animate attributeName="r" from="18" to="28" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" from="0.3" to="0" dur="2s" repeatCount="indefinite"/>
+  </circle>
+</svg>
