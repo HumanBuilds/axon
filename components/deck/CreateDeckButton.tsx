@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { createDeck } from '@/lib/actions/decks';
-import { Modal } from '@/components/ui/FormModal';
+import { Modal } from '@/components/ui/Modal';
 
 interface CreateDeckButtonProps {
     className?: string;

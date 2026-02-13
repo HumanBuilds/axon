@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { createCard } from '@/lib/actions/cards';
 import { CardContentEditor } from './CardContentEditor';
-import { Modal } from '@/components/ui/FormModal';
+import { Modal } from '@/components/ui/Modal';
 
 interface AddCardButtonProps {
     deckId: string;
