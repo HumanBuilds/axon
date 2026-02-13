@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { createDeck } from '@/lib/actions/decks';
+import { FormModal } from '@/components/ui/FormModal';
 
 interface CreateDeckButtonProps {
     className?: string;
@@ -12,7 +13,6 @@ export function CreateDeckButton({ className, children }: CreateDeckButtonProps)
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const formRef = useRef<HTMLFormElement>(null);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -23,7 +23,6 @@ export function CreateDeckButton({ className, children }: CreateDeckButtonProps)
         try {
             await createDeck(formData);
             setIsOpen(false);
-            formRef.current?.reset();
         } catch (err: any) {
             setError(err.message || 'Something went wrong');
         } finally {
@@ -40,63 +39,42 @@ export function CreateDeckButton({ className, children }: CreateDeckButtonProps)
                 {children || '+ Create Deck'}
             </button>
 
-            {/* Modal */}
-            <div className={`modal ${isOpen ? 'modal-open' : ''}`}>
-                <div className="modal-box bg-base-100 border-2 border-neutral">
-                    <h3 className="font-black text-2xl tracking-tight mb-6">Create New Deck</h3>
+            <FormModal
+                isOpen={isOpen}
+                onClose={() => { setIsOpen(false); setError(null); }}
+                title="Create New Deck"
+                loading={loading}
+                error={error}
+                onSubmit={handleSubmit}
+                submitLabel="Create Deck"
+                loadingLabel="Creating..."
+            >
+                <div className="space-y-4">
+                    <div className="form-control">
+                        <label className="label">
+                            <span className="label-text font-bold">Deck Name</span>
+                        </label>
+                        <input
+                            name="name"
+                            type="text"
+                            placeholder="e.g. Spanish Vocabulary"
+                            className="input input-bordered"
+                            required
+                        />
+                    </div>
 
-                    <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text font-bold">Deck Name</span>
-                            </label>
-                            <input
-                                name="name"
-                                type="text"
-                                placeholder="e.g. Spanish Vocabulary"
-                                className="input input-bordered"
-                                required
-                            />
-                        </div>
-
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text font-bold">Description (optional)</span>
-                            </label>
-                            <textarea
-                                name="description"
-                                className="textarea textarea-bordered h-24"
-                                placeholder="What is this deck about?"
-                            ></textarea>
-                        </div>
-
-                        {error && (
-                            <div className="alert alert-error text-sm py-2">
-                                <span>{error}</span>
-                            </div>
-                        )}
-
-                        <div className="modal-action flex gap-2">
-                            <button
-                                type="button"
-                                onClick={() => setIsOpen(false)}
-                                className="btn btn-ghost"
-                                disabled={loading}
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                type="submit"
-                                className={`btn btn-primary ${loading ? 'loading' : ''}`}
-                                disabled={loading}
-                            >
-                                {loading ? 'Creating...' : 'Create Deck'}
-                            </button>
-                        </div>
-                    </form>
+                    <div className="form-control">
+                        <label className="label">
+                            <span className="label-text font-bold">Description (optional)</span>
+                        </label>
+                        <textarea
+                            name="description"
+                            className="textarea textarea-bordered h-24"
+                            placeholder="What is this deck about?"
+                        ></textarea>
+                    </div>
                 </div>
-                <div className="modal-backdrop" onClick={() => !loading && setIsOpen(false)}></div>
-            </div>
+            </FormModal>
         </>
     );
 }
