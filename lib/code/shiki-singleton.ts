@@ -6,7 +6,7 @@ import { createHighlighter, type Highlighter, type BundledLanguage } from 'shiki
 
 let highlighterPromise: Promise<Highlighter> | null = null;
 
-const THEME = 'github-dark';
+const THEME = 'github-light';
 
 // Common languages to preload
 const PRELOAD_LANGUAGES: BundledLanguage[] = [

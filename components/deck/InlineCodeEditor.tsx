@@ -12,8 +12,8 @@ import type { editor } from 'monaco-editor';
 const Editor = dynamic(() => import('@monaco-editor/react'), {
     ssr: false,
     loading: () => (
-        <div className="flex items-center justify-center h-24 bg-[#0d1117]">
-            <div className="flex items-center gap-2 text-white/40 text-sm">
+        <div className="flex items-center justify-center h-24 bg-slate-50">
+            <div className="flex items-center gap-2 text-slate-400 text-sm">
                 <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
@@ -88,7 +88,7 @@ export function InlineCodeEditor({ code, language, onChange, onLanguageChange, o
                         ref={langButtonRef}
                         type="button"
                         onClick={() => setShowLangDropdown(!showLangDropdown)}
-                        className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-white/40 hover:text-white/70 transition-colors"
+                        className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-700 transition-colors"
                     >
                         {getDisplayName(language)}
                         <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -102,7 +102,7 @@ export function InlineCodeEditor({ code, language, onChange, onLanguageChange, o
                             onClose={() => setShowLangDropdown(false)}
                             onSelect={onLanguageChange}
                             currentLanguage={language}
-                            variant="dark"
+                            variant="light"
                         />
                     )}
                 </div>
@@ -112,7 +112,7 @@ export function InlineCodeEditor({ code, language, onChange, onLanguageChange, o
                         type="button"
                         onClick={onRun}
                         disabled={isRunning}
-                        className={`h-6 flex items-center gap-1 px-2 text-[10px] font-medium text-green-400/80 hover:text-green-400 hover:bg-white/5 transition-all ${isRunning ? 'opacity-100' : 'opacity-100 md:opacity-0 md:group-hover:opacity-100'}`}
+                        className={`h-6 flex items-center gap-1 px-2 text-[10px] font-medium text-green-600/80 hover:text-green-600 hover:bg-slate-200 transition-all ${isRunning ? 'opacity-100' : 'opacity-100 md:opacity-0 md:group-hover:opacity-100'}`}
                     >
                         {isRunning ? (
                             <>

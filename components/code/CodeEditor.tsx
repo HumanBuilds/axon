@@ -11,8 +11,8 @@ import type { editor } from 'monaco-editor';
 const Editor = dynamic(() => import('@monaco-editor/react'), {
     ssr: false,
     loading: () => (
-        <div className="flex items-center justify-center h-32 bg-[#0d1117]">
-            <div className="flex items-center gap-2 text-white/60">
+        <div className="flex items-center justify-center h-32 bg-slate-50">
+            <div className="flex items-center gap-2 text-slate-400">
                 <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
                     <circle
                         className="opacity-25"
@@ -134,14 +134,14 @@ export function CodeEditor({
     return (
         <div className="flex flex-col">
             {/* Header bar */}
-            <div className="flex items-center justify-between px-3 py-1.5 bg-[#161b22] border-b border-white/10">
+            <div className="flex items-center justify-between px-3 py-1.5 bg-slate-100 border-b border-slate-200">
                 <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/60">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
                         {getDisplayName(language)}
                     </span>
                 </div>
                 <div className="flex items-center gap-1">
-                    <span className="text-[9px] text-white/30 hidden sm:inline">
+                    <span className="text-[9px] text-slate-400 hidden sm:inline">
                         Cmd+S save | Esc cancel
                     </span>
                     <button
@@ -149,11 +149,11 @@ export function CodeEditor({
                             e.stopPropagation();
                             onCancel();
                         }}
-                        className="p-1 hover:bg-white/10 transition-colors"
+                        className="p-1 hover:bg-slate-200 transition-colors"
                         title="Cancel (Esc)"
                     >
                         <svg
-                            className="w-3.5 h-3.5 text-white/60"
+                            className="w-3.5 h-3.5 text-slate-500"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
@@ -170,11 +170,11 @@ export function CodeEditor({
                             e.stopPropagation();
                             formatAndSave();
                         }}
-                        className="p-1 hover:bg-white/10 transition-colors"
+                        className="p-1 hover:bg-slate-200 transition-colors"
                         title="Save (Cmd+S)"
                     >
                         <svg
-                            className="w-3.5 h-3.5 text-green-400"
+                            className="w-3.5 h-3.5 text-green-600"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"

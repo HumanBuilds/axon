@@ -41,12 +41,12 @@ export function CodeActionBar({
             {/* Copy button */}
             <button
                 onClick={handleCopy}
-                className="p-1.5 hover:bg-white/10 transition-colors"
+                className="p-1.5 hover:bg-slate-200 transition-colors"
                 title="Copy code"
             >
                 {copied ? (
                     <svg
-                        className="w-4 h-4 text-green-400"
+                        className="w-4 h-4 text-green-600"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -58,7 +58,7 @@ export function CodeActionBar({
                     </svg>
                 ) : (
                     <svg
-                        className="w-4 h-4 text-white/60 hover:text-white/90"
+                        className="w-4 h-4 text-slate-400 hover:text-slate-700"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -76,11 +76,11 @@ export function CodeActionBar({
             {canEdit && (
                 <button
                     onClick={handleEdit}
-                    className="p-1.5 hover:bg-white/10 transition-colors"
+                    className="p-1.5 hover:bg-slate-200 transition-colors"
                     title="Edit code"
                 >
                     <svg
-                        className="w-4 h-4 text-white/60 hover:text-white/90"
+                        className="w-4 h-4 text-slate-400 hover:text-slate-700"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -98,11 +98,11 @@ export function CodeActionBar({
             {canRun && (
                 <button
                     onClick={handleRun}
-                    className="p-1.5 hover:bg-white/10 transition-colors"
+                    className="p-1.5 hover:bg-slate-200 transition-colors"
                     title="Run code"
                 >
                     <svg
-                        className="w-4 h-4 text-green-400/80 hover:text-green-400"
+                        className="w-4 h-4 text-green-600/80 hover:text-green-600"
                         viewBox="0 0 24 24"
                         fill="currentColor"
                     >

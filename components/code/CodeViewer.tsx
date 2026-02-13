@@ -47,8 +47,8 @@ export function CodeViewer({
             onMouseLeave={() => setIsHovered(false)}
         >
             {/* Header bar */}
-            <div className="flex items-center justify-between px-4 py-2 bg-[#161b22] border-b border-white/10">
-                <span className="text-xs font-bold uppercase tracking-widest opacity-60 text-white">
+            <div className="flex items-center justify-between px-4 py-2 bg-slate-100 border-b border-slate-200">
+                <span className="text-xs font-bold uppercase tracking-widest text-slate-500">
                     {getDisplayName(language)}
                 </span>
 
@@ -77,9 +77,9 @@ export function CodeViewer({
                     />
                 ) : (
                     <div className="animate-pulse">
-                        <div className="h-4 bg-white/10 w-3/4 mb-2"></div>
-                        <div className="h-4 bg-white/10 w-1/2 mb-2"></div>
-                        <div className="h-4 bg-white/10 w-5/6"></div>
+                        <div className="h-4 bg-slate-200 w-3/4 mb-2"></div>
+                        <div className="h-4 bg-slate-200 w-1/2 mb-2"></div>
+                        <div className="h-4 bg-slate-200 w-5/6"></div>
                     </div>
                 )}
             </div>
