@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tree:*)",
+      "Bash(ls:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nRefactor: Update redirect and revalidation paths from /decks to /\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nUI: Redesign ReviewButtons with minimal styling\n\n- Remove colored button styles for cleaner look\n- Add rounded borders and hover states\n- Use consistent typography with app fonts\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "Bash(npm run lint)",
+      "Bash(npm run lint:*)",
+      "Bash(npx next lint:*)",
+      "Bash(npm test:*)",
+      "Bash(npx vitest run:*)",
+      "Bash(npx eslint:*)",
+      "Bash(git status:*)",
+      "Bash(find:*)",
+      "WebSearch",
+      "Bash(npm run typecheck:*)",
+      "Bash(npm run test:run:*)",
+      "Bash(npx playwright test:*)",
+      "Bash(npx playwright install:*)",
+      "Bash(git -C \"C:\\\\Code\\\\HumanBuilds\\\\axon\" status)",
+      "Bash(git -C \"C:\\\\Code\\\\HumanBuilds\\\\axon\" diff)",
+      "Bash(git -C \"C:\\\\Code\\\\HumanBuilds\\\\axon\" log --oneline -5)",
+      "Bash(git -C \"C:\\\\Code\\\\HumanBuilds\\\\axon\" commit -m \"$\\(cat <<''EOF''\nFeature: Add review status banner and per-deck due counts to dashboard\n\nFetch due cards in parallel with decks query, display a banner between\nthe header and deck grid showing either cards due with a study CTA or\nan \"All Caught Up\" message. Fix per-deck dueCount \\(was hardcoded to 0\\).\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(npm install:*)"
+    ]
+  }
+}
