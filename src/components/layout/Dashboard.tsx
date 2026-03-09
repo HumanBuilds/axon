@@ -5,7 +5,7 @@ import Link from "next/link";
 import { createDeck } from "@/lib/actions/decks";
 import { logout } from "@/lib/actions/auth";
 import { useToast } from "@/components/ui/Toast";
-import { Settings, Plus, BarChart2, Upload } from "react-feather";
+import { Settings, Plus, BarChart2, Upload, Zap } from "react-feather";
 
 interface DeckWithCount {
   id: string;
@@ -52,6 +52,9 @@ export function Dashboard({
           <div className="flex items-center gap-3">
             <Link href="/stats" className="text-gray-400 hover:text-gray-600" title="Statistics">
               <BarChart2 size={20} />
+            </Link>
+            <Link href="/generate" className="text-gray-400 hover:text-gray-600" title="Generate with AI">
+              <Zap size={20} />
             </Link>
             <Link href="/import" className="text-gray-400 hover:text-gray-600" title="Import">
               <Upload size={20} />
