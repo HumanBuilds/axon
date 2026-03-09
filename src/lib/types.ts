@@ -14,6 +14,7 @@ export interface Card {
   created_at: string;
   updated_at: string;
   archived_at: string | null;
+  embedding: number[] | null;
 }
 
 export interface CardState {
