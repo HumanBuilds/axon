@@ -1,6 +1,6 @@
 # Axon — Master Feature Tracker
 
-**Last updated**: 2026-03-09
+**Last updated**: 2026-03-10
 **Plans deepened**: 2026-03-09 (6 parallel research agents)
 
 ## Research Enhancement Summary
@@ -100,100 +100,92 @@ P1 Complete MVP Loop ───────────────────�
 | CLAUDE.md workflows | Done | Verification + TDD protocols |
 | .gitignore updates | Done | Playwright artifacts |
 
-### Not Started — P0 (Fix What's Broken)
-
-| Feature | Status | Plan | Effort |
-|---|---|---|---|
-| Harden auth error handling | Not started | [P0 Plan](./P0-fix-whats-broken.md#feature-1-harden-auth-error-handling) | Small (1-2 hrs) |
-| User profiles table + migration | Not started | [P0 Plan](./P0-fix-whats-broken.md#feature-2-add-user-profiles-table) | Small (1-2 hrs) |
-
-### Not Started — P1 (Complete MVP Loop)
-
-| Feature | Status | Plan | Effort |
-|---|---|---|---|
-| Error toasts / feedback UI | Not started | [P1 Plan](./P1-complete-mvp-loop.md#feature-1-error-toasts--feedback-ui) | Medium (3-4 hrs) |
-| FSRS init on card create | Not started | [P1 Plan](./P1-complete-mvp-loop.md#feature-2-fsrs-initialization-on-card-create) | Small (1-2 hrs) |
-| Card editing | Not started | [P1 Plan](./P1-complete-mvp-loop.md#feature-3-card-editing) | Medium (3-4 hrs) |
-| Due count on dashboard | Not started | [P1 Plan](./P1-complete-mvp-loop.md#feature-4-due-count-on-dashboard) | Small (1-2 hrs) |
-| Soft-delete cards | Not started | [P1 Plan](./P1-complete-mvp-loop.md#feature-5-soft-delete-cards) | Small (1-2 hrs) |
-| Settings page | Not started | [P1 Plan](./P1-complete-mvp-loop.md#feature-6-settings-page) | Medium (4-5 hrs) |
-
-### Not Started — P2 (Import & Export)
-
-| Feature | Status | Plan | Effort |
-|---|---|---|---|
-| Import records migration | Not started | [P2 Plan](./P2-import-export.md#feature-0-import-records-migration) | Small (30 min) |
-| JSON import | Not started | [P2 Plan](./P2-import-export.md#feature-1-json-import) | Medium (2-3 hrs) |
-| CSV/TSV import | Not started | [P2 Plan](./P2-import-export.md#feature-2-csvtsv-import) | Medium (3-4 hrs) |
-| Anki .apkg import | Not started | [P2 Plan](./P2-import-export.md#feature-3-anki-apkg-import) | Large (6-8 hrs) |
-| Export to CSV/JSON | Not started | [P2 Plan](./P2-import-export.md#feature-4-export-to-csvjson) | Medium (2-3 hrs) |
-| Export to Anki .apkg | Not started | [P2 Plan](./P2-import-export.md#feature-5-export-to-anki-apkg) | Large (4-6 hrs) |
-
-### Not Started — P3 (AI Agents)
-
-| Feature | Status | Plan | Effort |
-|---|---|---|---|
-| Agent infrastructure | Not started | [P3 Plan](./P3-ai-agents.md#feature-0-agent-infrastructure) | Medium (3-4 hrs) |
-| Card Coach Agent | Not started | [P3 Plan](./P3-ai-agents.md#feature-1-card-coach-agent) | Medium (4-5 hrs) |
-| Topic Generator Agent | Not started | [P3 Plan](./P3-ai-agents.md#feature-2-topic-generator-agent) | Large (5-6 hrs) |
-| Streaming UI | Not started | [P3 Plan](./P3-ai-agents.md#feature-3-streaming-ui-pattern) | Medium (3-4 hrs) |
-| Rate limiting | Not started | [P3 Plan](./P3-ai-agents.md#feature-4-rate-limiting) | Small (1-2 hrs) |
-
-### Not Started — P4 (Embeddings & Interleaving)
-
-| Feature | Status | Plan | Effort |
-|---|---|---|---|
-| pgvector setup + migration | Not started | [P4 Plan](./P4-embeddings-interleaving.md#feature-1-enable-pgvector--add-embedding-column) | Small (1 hr) |
-| Embedding model integration | Not started | [P4 Plan](./P4-embeddings-interleaving.md#feature-2-embedding-model-selection--integration) | Medium (2-3 hrs) |
-| Embedding pipeline | Not started | [P4 Plan](./P4-embeddings-interleaving.md#feature-3-embedding-generation-pipeline) | Medium (3-4 hrs) |
-| Interleaving scheduler | Not started | [P4 Plan](./P4-embeddings-interleaving.md#feature-4-vector-based-interleaving-scheduler) | Medium (4-5 hrs) |
-| ANN index | Not started | [P4 Plan](./P4-embeddings-interleaving.md#feature-5-ann-index-for-fast-similarity) | Small (1 hr) |
-
-### Not Started — P5 (Card Browser)
-
-| Feature | Status | Plan | Effort |
-|---|---|---|---|
-| Card browser (search/filter) | Not started | [P5 Plan](./P5-card-browser.md#feature-1-card-browser) | Large (5-6 hrs) |
-| Tag management | Not started | [P5 Plan](./P5-card-browser.md#feature-2-tag-management) | Medium (3-4 hrs) |
-| Bulk operations | Not started | [P5 Plan](./P5-card-browser.md#feature-3-bulk-operations) | Medium (3-4 hrs) |
-
-### Not Started — P6 (Statistics)
-
-| Feature | Status | Plan | Effort |
-|---|---|---|---|
-| Chart library + data layer | Not started | [P6 Plan](./P6-statistics.md#feature-0-chart-library--data-layer) | Medium (2-3 hrs) |
-| Review count chart | Not started | [P6 Plan](./P6-statistics.md#feature-2-review-count-over-time) | Medium (2-3 hrs) |
-| Retention rate | Not started | [P6 Plan](./P6-statistics.md#feature-3-retention-rate) | Medium (2-3 hrs) |
-| Card maturity distribution | Not started | [P6 Plan](./P6-statistics.md#feature-4-card-maturity-distribution) | Small (1-2 hrs) |
-| Review forecast | Not started | [P6 Plan](./P6-statistics.md#feature-5-review-forecast) | Small (1-2 hrs) |
-| Study heatmap | Not started | [P6 Plan](./P6-statistics.md#feature-6-study-streak--heatmap) | Medium (3-4 hrs) |
-
-### Not Started — P7 (Advanced Scheduling)
-
-| Feature | Status | Plan | Effort |
-|---|---|---|---|
-| Configurable learning steps | Not started | [P7 Plan](./P7-advanced-scheduling.md#feature-1-configurable-learning-steps) | Medium (2-3 hrs) |
-| FSRS parameter optimization | Not started | [P7 Plan](./P7-advanced-scheduling.md#feature-2-fsrs-parameter-optimization) | Large (5-6 hrs) |
-| Anki review history import | Not started | [P7 Plan](./P7-advanced-scheduling.md#feature-3-anki-review-history-import) | Medium (3-4 hrs) |
-
-### Not Started — P8 (Polish)
-
-| Feature | Status | Plan | Effort |
-|---|---|---|---|
-| Keyboard shortcuts | Not started | [P8 Plan](./P8-polish-infrastructure.md#feature-1-keyboard-shortcuts-in-study-session) | Small (1 hr) |
-| Markdown rendering | Not started | [P8 Plan](./P8-polish-infrastructure.md#feature-2-markdown-rendering) | Small (1-2 hrs) |
-| Input sanitization | Not started | [P8 Plan](./P8-polish-infrastructure.md#feature-3-input-sanitization-xss-prevention) | Small (1-2 hrs) |
-| Tests | Not started | [P8 Plan](./P8-polish-infrastructure.md#feature-4-tests) | Large (6-8 hrs) |
-| Mobile responsive pass | Not started | [P8 Plan](./P8-polish-infrastructure.md#feature-5-mobile-responsive-pass) | Large (4-6 hrs) |
-| OAuth login | Not started | [P8 Plan](./P8-polish-infrastructure.md#feature-6-oauth-login-google-github) | Medium (2-3 hrs) |
-
----
-
-## Remaining Prerequisite
+### Done — P0 (Fix What's Broken)
 
 | Feature | Status | Notes |
 |---|---|---|
-| Install Playwright + Chromium | Not started | `npx playwright install chromium` — needed for E2E tests |
+| Harden auth error handling | Done | `auth-errors.ts` with friendly error mapping, tests |
+| User profiles table + migration | Done | `20260310000000_user_profiles.sql`, `getProfile`/`updateProfile` actions |
+
+### Done — P1 (Complete MVP Loop)
+
+| Feature | Status | Notes |
+|---|---|---|
+| Error toasts / feedback UI | Done | `Toast.tsx` with ToastProvider, useToast hook, portal rendering |
+| FSRS init on card create | Done | `createCard()` creates card_states row with FSRS init |
+| Card editing | Done | DeckDetail with edit mode, dirty detection, save/discard |
+| Due count on dashboard | Done | Due count badges per deck on Dashboard |
+| Soft-delete cards | Done | `archived_at` column, `deleteCard()` → soft delete, `restoreCard()` |
+| Settings page | Done | Profile, scheduling (retention, daily limits), learning steps |
+
+### Done — P2 (Import & Export)
+
+| Feature | Status | Notes |
+|---|---|---|
+| Import records migration | Done | `20260310000002_import_records.sql` |
+| JSON import | Done | `importJSON()` with schema validation |
+| CSV/TSV import | Done | PapaParse with auto-detect delimiter, column mapping |
+| Anki .apkg import | Done | JSZip + sql.js, field/tag extraction, revlog parsing |
+| Export to CSV/JSON | Done | `exportDeckJSON()`, `exportDeckCSV()` |
+| Export to Anki .apkg | Skipped | Complex binary format; CSV/JSON export covers use cases |
+
+### Done — P3 (AI Agents)
+
+| Feature | Status | Notes |
+|---|---|---|
+| Agent infrastructure | Done | `@anthropic-ai/sdk` singleton client |
+| Card Coach Agent | Done | `/api/agents/coach` with `tool_use` structured output |
+| Topic Generator Agent | Done | `/api/agents/generate` with JSON array parsing |
+| Streaming UI | Done | CardCoachPanel, GenerateSession components |
+| Rate limiting | Done | In-memory sliding window rate limiter |
+
+### Done — P4 (Embeddings & Interleaving)
+
+| Feature | Status | Notes |
+|---|---|---|
+| pgvector setup + migration | Done | `20260310000003_pgvector_embeddings.sql`, HNSW index |
+| Embedding model integration | Done | `text-embedding-3-small` @ 512 dims |
+| Embedding pipeline | Done | `generateAndStoreEmbedding()`, batch embeddings |
+| Interleaving scheduler | Done | Greedy interleaving by cosine similarity |
+| ANN index | Done | HNSW index with `match_similar_cards` RPC |
+
+### Done — P5 (Card Browser)
+
+| Feature | Status | Notes |
+|---|---|---|
+| Card browser (search/filter) | Done | Full browser with search, deck/state/tag filters, sort, pagination |
+| Tag management | Done | `TagInput` component with autocomplete, `getUserTags()` |
+| Bulk operations | Done | Bulk tag, move, archive via `bulkTagCards()`, `bulkMoveCards()`, `bulkDeleteCards()` |
+
+### Done — P6 (Statistics)
+
+| Feature | Status | Notes |
+|---|---|---|
+| Chart library + data layer | Done | recharts + @uiw/react-heat-map, 6 server actions |
+| Review count chart | Done | Stacked bar chart with rating breakdown |
+| Retention rate | Done | Line chart showing daily pass rate |
+| Card maturity distribution | Done | Donut pie chart by FSRS state |
+| Review forecast | Done | Bar chart of upcoming due cards |
+| Study heatmap | Done | GitHub-style heatmap for past year |
+
+### Done — P7 (Advanced Scheduling)
+
+| Feature | Status | Notes |
+|---|---|---|
+| Configurable learning steps | Done | Settings UI, FSRS wrapper passes steps to scheduler |
+| FSRS parameter optimization | Done | Server action with `@open-spaced-repetition/binding` (dynamic import) |
+| Anki review history import | Done | Extended parser with revlog, `replayAnkiHistory()` FSRS replay |
+
+### Done — P8 (Polish)
+
+| Feature | Status | Notes |
+|---|---|---|
+| Keyboard shortcuts | Done | Space/Enter to reveal, 1-4 to rate, key hints shown |
+| Markdown rendering | Done | `react-markdown` + `remark-gfm`, restricted elements |
+| Input sanitization | Done | `sanitize()` strips HTML/scripts, CSP headers in `next.config.ts` |
+| Tests | Done | FSRS wrapper tests (12 tests), auth error tests (4 tests) |
+| Mobile responsive pass | Done | 2x2 rating grid, responsive headers, touch-friendly sizes |
+| OAuth login | Done | Google/GitHub OAuth buttons, `/auth/callback` route |
 
 ---
 

@@ -12,6 +12,11 @@ export default async function SettingsPage() {
 
   const profile = await getProfile();
 
+  const { count } = await supabase
+    .from("review_logs")
+    .select("*", { count: "exact", head: true })
+    .eq("user_id", user.id);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200">
@@ -21,7 +26,7 @@ export default async function SettingsPage() {
         </div>
       </header>
       <main className="max-w-3xl mx-auto px-4 py-8">
-        <SettingsForm profile={profile} />
+        <SettingsForm profile={profile} reviewCount={count ?? 0} />
       </main>
     </div>
   );

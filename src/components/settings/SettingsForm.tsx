@@ -2,28 +2,58 @@
 
 import { useState } from "react";
 import { updateProfile } from "@/lib/actions/profile";
+import { optimizeFSRSParameters } from "@/lib/actions/optimize";
 import { useToast } from "@/components/ui/Toast";
 import type { UserProfile } from "@/lib/types";
 
 interface Props {
   profile: UserProfile;
+  reviewCount: number;
 }
 
-export function SettingsForm({ profile }: Props) {
+function formatLearningSteps(steps: string[]): string {
+  return steps.join(", ");
+}
+
+function validateSteps(value: string): string | null {
+  const parts = value.split(",").map((s) => s.trim()).filter(Boolean);
+  for (const part of parts) {
+    const num = parseFloat(part);
+    if (isNaN(num) || num <= 0) return `"${part}" is not a valid positive number`;
+  }
+  if (parts.length === 0) return "At least one step is required";
+  return null;
+}
+
+export function SettingsForm({ profile, reviewCount }: Props) {
   const { addToast } = useToast();
   const [displayName, setDisplayName] = useState(profile.display_name ?? "");
   const [retention, setRetention] = useState(profile.desired_retention);
   const [maxNew, setMaxNew] = useState(profile.max_new_cards_per_day);
   const [maxReviews, setMaxReviews] = useState(profile.max_reviews_per_day);
+  const [learningSteps, setLearningSteps] = useState(formatLearningSteps(profile.learning_steps));
+  const [relearningSteps, setRelearningSteps] = useState(formatLearningSteps(profile.relearning_steps));
   const [saving, setSaving] = useState(false);
+  const [optimizing, setOptimizing] = useState(false);
+  const [stepsError, setStepsError] = useState<string | null>(null);
+  const [reStepsError, setReStepsError] = useState<string | null>(null);
 
   const isDirty =
     displayName !== (profile.display_name ?? "") ||
     retention !== profile.desired_retention ||
     maxNew !== profile.max_new_cards_per_day ||
-    maxReviews !== profile.max_reviews_per_day;
+    maxReviews !== profile.max_reviews_per_day ||
+    learningSteps !== formatLearningSteps(profile.learning_steps) ||
+    relearningSteps !== formatLearningSteps(profile.relearning_steps);
 
   async function handleSave() {
+    const lErr = validateSteps(learningSteps);
+    const rErr = validateSteps(relearningSteps);
+    if (lErr) { setStepsError(lErr); return; }
+    if (rErr) { setReStepsError(rErr); return; }
+    setStepsError(null);
+    setReStepsError(null);
+
     setSaving(true);
     try {
       await updateProfile({
@@ -31,6 +61,8 @@ export function SettingsForm({ profile }: Props) {
         desired_retention: retention,
         max_new_cards_per_day: maxNew,
         max_reviews_per_day: maxReviews,
+        learning_steps: learningSteps.split(",").map((s) => s.trim()).filter(Boolean),
+        relearning_steps: relearningSteps.split(",").map((s) => s.trim()).filter(Boolean),
       });
       addToast.success("Settings saved");
     } catch {
@@ -45,7 +77,29 @@ export function SettingsForm({ profile }: Props) {
     setRetention(profile.desired_retention);
     setMaxNew(profile.max_new_cards_per_day);
     setMaxReviews(profile.max_reviews_per_day);
+    setLearningSteps(formatLearningSteps(profile.learning_steps));
+    setRelearningSteps(formatLearningSteps(profile.relearning_steps));
+    setStepsError(null);
+    setReStepsError(null);
   }
+
+  async function handleOptimize() {
+    setOptimizing(true);
+    try {
+      const result = await optimizeFSRSParameters();
+      if (result.error) {
+        addToast.error(result.error);
+      } else {
+        addToast.success("FSRS parameters optimized successfully");
+      }
+    } catch {
+      addToast.error("Optimization failed");
+    } finally {
+      setOptimizing(false);
+    }
+  }
+
+  const canOptimize = reviewCount >= 1000;
 
   return (
     <div className="space-y-8">
@@ -118,7 +172,64 @@ export function SettingsForm({ profile }: Props) {
               />
             </div>
           </div>
+
+          <div className="max-w-sm">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Learning steps (minutes, comma-separated)
+            </label>
+            <input
+              type="text"
+              value={learningSteps}
+              onChange={(e) => { setLearningSteps(e.target.value); setStepsError(null); }}
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              placeholder="1, 10"
+            />
+            {stepsError && <p className="mt-1 text-xs text-red-600">{stepsError}</p>}
+            <p className="mt-1 text-xs text-gray-500">e.g. 1, 10 = 1min then 10min</p>
+          </div>
+
+          <div className="max-w-sm">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Relearning steps (minutes, comma-separated)
+            </label>
+            <input
+              type="text"
+              value={relearningSteps}
+              onChange={(e) => { setRelearningSteps(e.target.value); setReStepsError(null); }}
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              placeholder="10"
+            />
+            {reStepsError && <p className="mt-1 text-xs text-red-600">{reStepsError}</p>}
+            <p className="mt-1 text-xs text-gray-500">e.g. 10 = 10min relearning step</p>
+          </div>
         </div>
+      </section>
+
+      {/* FSRS Optimization */}
+      <section className="rounded-lg border border-gray-200 bg-white p-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">FSRS Optimization</h2>
+        <p className="text-sm text-gray-600 mb-3">
+          Personalize your scheduling parameters based on your review history.
+          Requires at least 1,000 reviews.
+        </p>
+        <p className="text-sm text-gray-500 mb-4">
+          You have <span className="font-medium text-gray-700">{reviewCount.toLocaleString()}</span> reviews.
+          {profile.last_optimization && (
+            <> Last optimized: {new Date(profile.last_optimization).toLocaleDateString()}</>
+          )}
+        </p>
+        <button
+          onClick={handleOptimize}
+          disabled={!canOptimize || optimizing}
+          className="rounded-md bg-indigo-600 px-4 py-2 text-sm text-white font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {optimizing ? "Optimizing..." : "Optimize Parameters"}
+        </button>
+        {!canOptimize && (
+          <p className="mt-2 text-xs text-gray-400">
+            Need {(1000 - reviewCount).toLocaleString()} more reviews to enable optimization
+          </p>
+        )}
       </section>
 
       {/* Features */}

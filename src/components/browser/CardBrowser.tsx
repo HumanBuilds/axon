@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useToast } from "@/components/ui/Toast";
 import { searchCards, bulkDeleteCards, bulkTagCards, bulkMoveCards } from "@/lib/actions/cards";
 import { TagInput } from "@/components/ui/TagInput";
@@ -27,7 +27,6 @@ interface Props {
 }
 
 export function CardBrowser({ initialCards, initialTotal, decks, allTags }: Props) {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const { addToast } = useToast();
 

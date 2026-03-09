@@ -19,11 +19,29 @@ function stripAnkiHtml(html: string): string {
     .trim();
 }
 
+export interface AnkiReviewLog {
+  /** Anki card id (used to match reviews to cards) */
+  cardId: number;
+  /** Timestamp in milliseconds */
+  timestamp: number;
+  /** Anki ease: 1=Again, 2=Hard, 3=Good, 4=Easy */
+  ease: number;
+  /** Interval in days (negative = seconds for learning) */
+  interval: number;
+  /** Last interval */
+  lastInterval: number;
+  /** Type: 0=learn, 1=review, 2=relearn, 3=filtered */
+  type: number;
+}
+
 export interface AnkiParseResult {
   cards: ImportedCard[];
   noteTypes: string[];
   tagList: string[];
   deckName: string;
+  /** Maps Anki note index to card id for review history matching */
+  cardNoteMap?: Map<number, number>;
+  reviewLogs?: AnkiReviewLog[];
 }
 
 export async function parseApkg(
@@ -116,11 +134,44 @@ export async function parseApkg(
       }
     }
 
+    // Extract review history from revlog table
+    const reviewLogs: AnkiReviewLog[] = [];
+    const cardNoteMap = new Map<number, number>();
+    try {
+      // Build card→note mapping from cards table
+      const cardsResult = sqlDb.exec("SELECT id, nid FROM cards");
+      if (cardsResult.length > 0) {
+        for (const row of cardsResult[0].values) {
+          cardNoteMap.set(row[0] as number, row[1] as number);
+        }
+      }
+
+      const revlogResult = sqlDb.exec(
+        "SELECT id, cid, ease, ivl, lastIvl, type FROM revlog ORDER BY id ASC"
+      );
+      if (revlogResult.length > 0) {
+        for (const row of revlogResult[0].values) {
+          reviewLogs.push({
+            cardId: row[1] as number,
+            timestamp: row[0] as number,
+            ease: row[2] as number,
+            interval: row[3] as number,
+            lastInterval: row[4] as number,
+            type: row[5] as number,
+          });
+        }
+      }
+    } catch {
+      // revlog may not exist in all exports
+    }
+
     return {
       cards,
       noteTypes,
       tagList: Array.from(allTags).sort(),
       deckName,
+      cardNoteMap,
+      reviewLogs,
     };
   } finally {
     sqlDb.close();

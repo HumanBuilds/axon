@@ -5,6 +5,15 @@ import { createClient } from "@/lib/supabase/server";
 import type { CardSource, CardFSRSState } from "@/lib/types";
 import { createNewCard } from "@/lib/fsrs";
 
+/** Strip HTML tags and dangerous patterns from card content */
+function sanitize(text: string): string {
+  return text
+    .replace(/<script[\s>][\s\S]*?<\/script>/gi, "")
+    .replace(/<[^>]+>/g, "")
+    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "")
+    .replace(/javascript:/gi, "");
+}
+
 export async function getCards(deckId: string) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -38,8 +47,8 @@ export async function createCard(
     .insert({
       deck_id: deckId,
       user_id: user.id,
-      front,
-      back,
+      front: sanitize(front),
+      back: sanitize(back),
       tags,
       source,
     })
@@ -85,8 +94,8 @@ export async function updateCard(
   if (!user) throw new Error("Not authenticated");
 
   const updates: Record<string, unknown> = {
-    front,
-    back,
+    front: sanitize(front),
+    back: sanitize(back),
     updated_at: new Date().toISOString(),
   };
   if (tags !== undefined) updates.tags = tags;

@@ -38,6 +38,8 @@ export function createScheduler(profile?: Partial<UserProfile>): FSRS {
     maximum_interval: 365,
     enable_short_term: true,
     w: profile.fsrs_weights ?? undefined,
+    learning_steps: profile.learning_steps?.map((m) => `${m}m` as `${number}m`),
+    relearning_steps: profile.relearning_steps?.map((m) => `${m}m` as `${number}m`),
   });
   return fsrs(params);
 }

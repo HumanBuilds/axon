@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { Markdown } from "@/components/ui/Markdown";
 import type { Rating } from "@/lib/types";
 
 interface StudyCard {
@@ -17,6 +18,13 @@ interface Props {
   cards: StudyCard[];
 }
 
+const RATINGS: { rating: Rating; label: string; key: string; color: string }[] = [
+  { rating: "again", label: "Again", key: "1", color: "bg-red-500 hover:bg-red-600" },
+  { rating: "hard", label: "Hard", key: "2", color: "bg-orange-500 hover:bg-orange-600" },
+  { rating: "good", label: "Good", key: "3", color: "bg-green-500 hover:bg-green-600" },
+  { rating: "easy", label: "Easy", key: "4", color: "bg-blue-500 hover:bg-blue-600" },
+];
+
 export function StudySession({ deckId, deckName, cards }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [revealed, setRevealed] = useState(false);
@@ -25,8 +33,8 @@ export function StudySession({ deckId, deckName, cards }: Props) {
   const card = cards[currentIndex];
   const isComplete = currentIndex >= cards.length;
 
-  async function handleRate(rating: Rating) {
-    if (!card) return;
+  const handleRate = useCallback(async (rating: Rating) => {
+    if (!card || submitting) return;
     setSubmitting(true);
 
     await fetch("/api/review", {
@@ -38,7 +46,39 @@ export function StudySession({ deckId, deckName, cards }: Props) {
     setRevealed(false);
     setCurrentIndex((i) => i + 1);
     setSubmitting(false);
-  }
+  }, [card, submitting]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.repeat) return;
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+      if (submitting || isComplete) return;
+
+      if (!revealed) {
+        if (e.code === "Space" || e.key === "Enter") {
+          e.preventDefault();
+          setRevealed(true);
+        }
+      } else {
+        const ratingMap: Record<string, Rating> = {
+          "1": "again",
+          "2": "hard",
+          "3": "good",
+          "4": "easy",
+        };
+        const rating = ratingMap[e.key];
+        if (rating) {
+          e.preventDefault();
+          handleRate(rating);
+        }
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [revealed, submitting, isComplete, handleRate]);
 
   if (cards.length === 0) {
     return (
@@ -101,44 +141,42 @@ export function StudySession({ deckId, deckName, cards }: Props) {
 
       <main className="flex-1 flex items-center justify-center px-4">
         <div className="w-full max-w-2xl">
-          <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-8 min-h-[300px] flex flex-col justify-center">
+          <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-6 sm:p-8 min-h-[250px] sm:min-h-[300px] flex flex-col justify-center">
             <div className="text-center">
-              <p className="text-lg text-gray-900 whitespace-pre-wrap">{card.front}</p>
+              <Markdown content={card.front} />
             </div>
 
             {revealed && (
               <div className="mt-8 pt-8 border-t border-gray-100 text-center">
-                <p className="text-lg text-gray-700 whitespace-pre-wrap">{card.back}</p>
+                <Markdown content={card.back} />
               </div>
             )}
           </div>
 
           <div className="mt-6 flex justify-center">
             {!revealed ? (
-              <button
-                onClick={() => setRevealed(true)}
-                className="rounded-md bg-indigo-600 px-8 py-3 text-white font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              >
-                Show Answer
-              </button>
+              <div className="text-center">
+                <button
+                  onClick={() => setRevealed(true)}
+                  className="rounded-md bg-indigo-600 px-8 py-3 text-white font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                  Show Answer
+                </button>
+                <p className="mt-2 text-xs text-gray-400">Space / Enter</p>
+              </div>
             ) : (
-              <div className="flex gap-3">
-                {(
-                  [
-                    { rating: "again" as Rating, label: "Again", color: "bg-red-500 hover:bg-red-600" },
-                    { rating: "hard" as Rating, label: "Hard", color: "bg-orange-500 hover:bg-orange-600" },
-                    { rating: "good" as Rating, label: "Good", color: "bg-green-500 hover:bg-green-600" },
-                    { rating: "easy" as Rating, label: "Easy", color: "bg-blue-500 hover:bg-blue-600" },
-                  ] as const
-                ).map(({ rating, label, color }) => (
-                  <button
-                    key={rating}
-                    onClick={() => handleRate(rating)}
-                    disabled={submitting}
-                    className={`rounded-md px-6 py-3 text-white font-medium ${color} disabled:opacity-50`}
-                  >
-                    {label}
-                  </button>
+              <div className="grid grid-cols-2 sm:flex gap-3">
+                {RATINGS.map(({ rating, label, key, color }) => (
+                  <div key={rating} className="text-center">
+                    <button
+                      onClick={() => handleRate(rating)}
+                      disabled={submitting}
+                      className={`w-full sm:w-auto rounded-md px-6 py-3 text-white font-medium ${color} disabled:opacity-50 min-h-[44px]`}
+                    >
+                      {label}
+                    </button>
+                    <p className="mt-1 text-xs text-gray-400">{key}</p>
+                  </div>
                 ))}
               </div>
             )}
