@@ -1,116 +1,121 @@
-# CLAUDE.md
+# Axon - Flashcard App
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## Tech Stack
+- **Framework**: Next.js 15 (App Router, TypeScript)
+- **Styling**: Tailwind CSS v4
+- **Icons**: react-feather (Feather Icons) — use by default for all icons
+- **Database**: Supabase (PostgreSQL + Auth)
+- **Scheduling**: ts-fsrs (FSRS v6 spaced repetition)
+- **Testing**: Vitest + Testing Library + happy-dom
 
-## Project Overview
-
-Axon is a flashcard learning application with spaced repetition (FSRS algorithm) and code execution capabilities. Built with Next.js 16 App Router, React 19, Supabase, and Tailwind CSS.
+## Project Structure
+```
+src/
+  app/              # Next.js App Router pages
+    (auth)/         # Login/signup pages
+    (dashboard)/    # Deck detail and study pages
+    api/review/     # Review submission endpoint
+  components/
+    layout/         # Dashboard, header components
+    deck/           # Deck detail, card editing
+    flashcard/      # Study session, flashcard display
+    ui/             # Shared UI primitives
+  lib/
+    actions/        # Server actions (auth, decks, cards)
+    fsrs/           # FSRS scheduling wrapper
+    supabase/       # Supabase client/server helpers
+    types.ts        # Shared TypeScript types
+  test/             # Test setup
+supabase/
+  migrations/       # Database migrations
+```
 
 ## Commands
+- `npm run dev` — Start dev server with Turbopack
+- `npm run build` — Production build
+- `npm run lint` — ESLint
+- `npm run typecheck` — TypeScript type-checking (`tsc --noEmit`)
+- `npm test` — Vitest (watch mode)
+- `npm run test:run` — Vitest (single run)
+- `npx playwright test` — E2E tests (Chromium)
 
-```bash
-npm run dev          # Start development server (localhost:3000)
-npm run build        # Production build
-npm run lint         # Run ESLint
-npm test             # Run Vitest in watch mode
-npm run test:run     # Run tests once (CI)
-npm run test:coverage # Run tests with coverage
-```
+## Path Alias
+- `@/*` maps to `./src/*`
 
-Supabase local development:
-- Database: port 54322
-- API: port 54321
-- Studio: port 54323
+## Database
+- Supabase with RLS policies on all tables
+- Tables: decks, cards, card_states, review_logs
+- All user data isolated via `user_id` + RLS
 
-## Architecture
+---
 
-### Tech Stack
-- **Framework**: Next.js 16.1.6 with App Router, React 19.2.3
-- **Database**: Supabase (PostgreSQL 17) with Row-Level Security
-- **Auth**: Supabase Auth (email/password) via `@supabase/ssr`
-- **Styling**: Tailwind CSS v4 + DaisyUI v5 (wireframe theme) + `@tailwindcss/typography`
-- **Spaced Repetition**: ts-fsrs v5
-- **Code Editor**: Monaco Editor (`@monaco-editor/react` ^4.7.0, lazy loaded for edit mode)
-- **Syntax Highlighting**: Shiki v3 + `@shikijs/rehype` (static rendering for view mode)
-- **Code Execution**: Piston API
-- **Markdown**: react-markdown + remark-gfm (GFM support)
-- **Animation**: Framer Motion v12
+## Verification Workflow (run after every change)
 
-### Key Directories
-- `app/` - Next.js App Router pages and layouts
-  - `app/page.tsx` - Home/dashboard (decks list for logged-in users, landing for guests)
-  - `app/(auth)/` - Login/signup pages (client components)
-  - `app/(dashboard)/decks/[deckId]/study/` - Study session page
-- `components/` - React components organized by domain:
-  - `components/code/` - CodeViewer, CodeEditor, CodeBlock, CodeActionBar, CodeTerminal
-  - `components/deck/` - DeckCard, CardContentEditor (orchestrator), useCardContentEditor (hook), TextSegment, CodeSegment, InlineCodeEditor, CreateDeckButton, AddCardButton, ExecutionOutput
-  - `components/flashcard/` - Flashcard, StudySession, ReviewButtons
-  - `components/layout/` - Header
-  - `components/ui/` - Markdown, Portal, PortalDropdown, LanguageSelectDropdown
-- `lib/actions/` - Server Actions (auth.ts, cards.ts, decks.ts)
-- `lib/supabase/` - Supabase client factories (client.ts for browser, server.ts for server)
-- `lib/fsrs/` - FSRS algorithm integration
-- `lib/code/` - Code execution (executor.ts), language mappings, Shiki singleton, Monaco theme, markdown utils
-- `supabase/migrations/` - PostgreSQL schema migrations
+1. `npm run typecheck` — must pass with zero errors
+2. `npm run lint` — must pass with zero errors
+3. `npm run test:run` — all tests must pass
 
-### Database Schema
-Four main tables with RLS policies:
-- **profiles** - User profiles (linked to auth.users)
-- **decks** - Flashcard decks with denormalized card_count
-- **cards** - Card content + complete FSRS state (stability, difficulty, due, reps, lapses, etc.)
-- **review_logs** - Review history for analytics
+## Red/Green TDD Protocol
 
-### Code Feature Architecture (Read/Write Separation)
-- **View mode**: Shiki renders static HTML (zero JS overhead)
-- **Edit mode**: Monaco Editor hydrates on demand
-- **Execution**: Piston API with 10-second timeout
+When implementing a feature or fixing a bug:
+1. Write a failing test first (`*.test.ts` next to the file being tested)
+2. Run `npm run test:run` — confirm the test fails (red)
+3. Write the minimum code to make the test pass
+4. Run `npm run test:run` — confirm it passes (green)
+5. Refactor if needed, re-run tests to confirm still green
+6. Run `npm run typecheck` and `npm run lint` before considering done
 
-The Shiki highlighter uses a singleton pattern (`lib/code/shiki-singleton.ts`) - never reinitialize per card.
+## Browser Verification
 
-### UI Patterns
-- Portal-based dropdowns for language selection (avoids z-index/overflow issues)
-- Live markdown preview with click-to-edit in CardContentEditor
-- Inline code editor component for embedding code blocks in cards
+For UI changes, verify in the browser:
+1. Run `npx playwright test` for automated E2E checks
+2. For manual verification: dev server at http://localhost:3000
+3. Auth credentials for testing: human.builds.dev@gmail.com / JYWUkz225EPBv62
 
-### Component Patterns
-- **Hook + Orchestrator + Sub-components**: Complex components like `CardContentEditor` extract state/logic into a `use*` hook and rendering into sub-components (`TextSegment`, `CodeSegment`), keeping the orchestrator lean (~90 lines)
-- **Shared utilities over prop-passing**: Functions like `cleanErrorOutput` live in `lib/` and are imported directly by consuming components rather than threaded through props
+Playwright auth state is cached in `e2e/.auth/user.json` (gitignored).
 
-### Path Alias
-Use `@/*` for imports from project root (configured in tsconfig.json).
+## Test File Conventions
 
-## Testing
+- Co-locate tests: `src/lib/fsrs/index.test.ts` next to `index.ts`
+- Use `vi.mock()` for external deps (Supabase, next/navigation)
+- Use `@testing-library/react` for component tests
+- Use Playwright (`e2e/`) for full user-flow verification
 
-- **Framework**: Vitest + happy-dom + @testing-library/react + @testing-library/jest-dom
-- **Config**: `vitest.config.ts`, setup file at `test/setup.ts`
-- **Test files**: Co-located with source as `*.test.ts` / `*.test.tsx`
-- **Patterns**: Mock heavy deps (Monaco, Markdown) with `vi.mock()` stubs; use `makeProps()` factories for component tests; use `renderHook()` for hook tests
+---
 
-## Agent Usage
+## UX Guidelines
 
-Always use the available specialized agents (via the Task tool) when their purpose matches the work being done. Do not skip agents to save time. Specifically:
+### Responsive Design
+- **Mobile-first**: Design for mobile (320px+) first, then scale up
+- **Breakpoints**: mobile (<640px) → tablet (640px–1024px) → desktop (1024px+)
+- Use Tailwind responsive prefixes: default mobile, `sm:` tablet, `lg:` desktop
 
-- **code-review** - Run after implementing features, fixing bugs, or refactoring code
-- **test-strategist** - Run after significant code changes to write or improve tests
-- **architecture-guardian** - Run when changes touch module boundaries, add new files/directories, or modify imports across layers
-- **accessibility-auditor** - Run after building or modifying interactive UI components
-- **component-architect** - Run when creating new React components, refactoring large components, or extracting shared patterns
-- **database-guardian** - Run when working on schema changes, migrations, RLS policies, or server actions that touch the database
-- **ui-style-enforcer** - Run after creating or modifying component styling to ensure visual consistency
-- **perf-optimizer** - Run when investigating or resolving performance issues
-- **session-retrospective** - Run at the end of significant work sessions
+### Navigation
+- **Prefer new pages over modals** — use Next.js routes for new views
+- **Use confirmation dialogs for destructive actions only** (delete deck, delete card, etc.)
 
-Run agents in parallel when multiple are relevant and independent. For example, after building a new UI feature, run code-review, test-strategist, and accessibility-auditor concurrently.
+### Forms & Content Editing
 
-## Environment Variables
+**Creating content** (new deck, new card):
+- Show Save/Submit button immediately
+- On invalid submit: show inline errors below each invalid field
+- Remove inline errors as the field becomes valid (on change/blur)
 
-Required in `.env.local`:
-```
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-```
+**Editing existing content**:
+- Hide Save/Discard buttons until a change is detected
+- Show Save/Discard only after the user modifies something
+- Same inline validation rules as creation
 
-Optional:
-```
-PISTON_API_URL=  # Defaults to https://emkc.org/api/v2/piston
-```
+**After successful save**:
+- Show a toast notification confirming success
+- Never rely solely on page navigation as confirmation
+
+### Icons
+- Use `react-feather` for all icons: `import { Plus, Trash2, Edit2 } from "react-feather"`
+- Default icon size: 16px inline, 20px for buttons, 24px for headers
+
+### Feedback
+- **Toast notifications**: Confirm success (green), warn (amber), error (red)
+- **Inline errors**: Red text below the field, removed when valid
+- **Loading states**: Disable buttons and show spinner or "Saving..." text
+
