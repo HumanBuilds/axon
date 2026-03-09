@@ -62,13 +62,16 @@ export function createScheduler(profile: UserProfile) {
   const params = generatorParameters({
     enable_fuzz: true,
     request_retention: profile.desired_retention,
-    // ts-fsrs handles learning steps internally
+    enable_short_term: true,
+    learning_steps: profile.learning_steps.map(m => `${m}m`),    // e.g., ["1m", "10m"]
+    relearning_steps: profile.relearning_steps.map(m => `${m}m`), // e.g., ["10m"]
+    w: profile.fsrs_weights ?? undefined,
   });
   return fsrs(params);
 }
 ```
 
-Note: Check ts-fsrs API for learning step configuration. FSRS v6 may handle steps differently than Anki.
+ts-fsrs accepts learning steps as string durations (e.g., `"1m"`, `"10m"`, `"1d"`). The `enable_short_term: true` flag activates the short-term scheduler which uses these learning steps.
 
 #### Step 4: Settings UI
 **File**: `src/components/settings/SettingsForm.tsx`
@@ -119,7 +122,7 @@ Add `fsrs_weights: number[] | null` and `last_optimization: string | null` to `U
 - Return optimized weights
 
 ```typescript
-import { FSRS, fsrs } from "ts-fsrs";
+import { computeParameters, convertCsvToFsrsItems } from "@open-spaced-repetition/binding";
 
 export async function optimizeParameters(userId: string): Promise<number[]> {
   // 1. Fetch review logs
@@ -130,17 +133,32 @@ export async function optimizeParameters(userId: string): Promise<number[]> {
     throw new Error("Need at least 1,000 reviews for optimization");
   }
 
-  // 3. Run optimization
-  // ts-fsrs may expose an optimization API
-  // Or use the FSRS optimizer library
-  const weights = await runOptimizer(logs);
+  // 3. Convert review logs to FSRS training format (CSV-like items)
+  // The @open-spaced-repetition/binding package provides convertCsvToFsrsItems
+  // Format: card_id, review_date, rating, ...
+  const csvData = convertReviewLogsToCsv(logs);
+  const items = convertCsvToFsrsItems(csvData, 4, "UTC", (ms) => 0);
 
-  // 4. Save weights
-  await updateProfile(userId, { fsrs_weights: weights, last_optimization: new Date().toISOString() });
+  // 4. Run optimization with timeout
+  const result = await computeParameters(items, {
+    enableShortTerm: true,
+    timeout: 100, // seconds
+    progress: (cur, total) => console.log(`Optimizing: ${cur}/${total}`),
+  });
 
-  return weights;
+  // 5. Save weights — result.w contains the 21 FSRS-6 parameters
+  await updateProfile(userId, {
+    fsrs_weights: Array.from(result.w),
+    last_optimization: new Date().toISOString(),
+  });
+
+  return Array.from(result.w);
 }
 ```
+
+**Package to install**: `npm install @open-spaced-repetition/binding`
+
+This uses the Rust-based FSRS optimizer compiled to WASM, which is significantly faster than a pure JS implementation.
 
 #### Step 4: Wire optimized weights into scheduler
 **File**: `src/lib/fsrs/index.ts`
