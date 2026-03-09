@@ -5,7 +5,7 @@ import Link from "next/link";
 import { createDeck } from "@/lib/actions/decks";
 import { logout } from "@/lib/actions/auth";
 import { useToast } from "@/components/ui/Toast";
-import { Settings, Plus, BarChart2, Upload, Zap } from "react-feather";
+import { Settings, Plus, BarChart2, Upload, Zap, Layers } from "react-feather";
 
 interface DeckWithCount {
   id: string;
@@ -50,6 +50,9 @@ export function Dashboard({
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <h1 className="text-xl font-bold text-gray-900">Axon</h1>
           <div className="flex items-center gap-3">
+            <Link href="/browser" className="text-gray-400 hover:text-gray-600" title="Card Browser">
+              <Layers size={20} />
+            </Link>
             <Link href="/stats" className="text-gray-400 hover:text-gray-600" title="Statistics">
               <BarChart2 size={20} />
             </Link>
