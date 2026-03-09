@@ -95,10 +95,36 @@ export async function searchCards(params: {
 - Test sort ordering
 - Test pagination
 
+### Research Insights
+
+**Full-text search**: Use a generated tsvector column for automatic index updates:
+```sql
+alter table public.cards add column fts tsvector
+  generated always as (
+    to_tsvector('english', coalesce(front, '') || ' ' || coalesce(back, ''))
+  ) stored;
+create index cards_fts_idx on public.cards using gin (fts);
+```
+Then use Supabase's `.textSearch("fts", query, { type: "websearch" })` which supports natural queries like "react hooks" or "react OR vue".
+
+**Virtual scrolling**: Use `@tanstack/react-virtual` (~12kb, TS-first, modern). Set `useFlushSync: false` for React 19. Use `estimateSize: () => 72` with `measureElement` ref for dynamic heights. `overscan: 10` prevents flicker during fast scrolling.
+
+**Tag index**: Add `create index cards_tags_idx on public.cards using gin (tags)` for array-overlap queries.
+
+**Distinct tags function** for autocomplete:
+```sql
+create or replace function public.get_distinct_tags()
+returns table(tag text) language sql security definer stable as $$
+  select distinct unnest(tags) as tag from public.cards
+  where user_id = auth.uid() order by tag;
+$$;
+```
+
 ### Performance Considerations
-- For large collections: add `gin` index on front/back for full-text search
-- Virtual scrolling for 1000+ results (use `@tanstack/react-virtual` or similar)
+- Generated tsvector column with GIN index for full-text search (auto-updates on card edit)
+- `@tanstack/react-virtual` for virtual scrolling 1000+ results
 - Debounce search input (300ms)
+- For <500 cards: fetch all, filter client-side with `useMemo`
 
 ---
 

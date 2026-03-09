@@ -55,12 +55,20 @@ alter table public.cards add column embedding vector(384);
 - Add `embedding: number[] | null` to Card interface
 - Note: pgvector returns as string `"[0.1,0.2,...]"` — may need parsing
 
-### Dimension Decision
-- **384 dimensions**: `all-MiniLM-L6-v2` (local, free, fast, good quality)
-- **256 dimensions**: `voyage-3-lite` (API, cheap, optimized for retrieval)
-- **1536 dimensions**: `text-embedding-3-small` (OpenAI, high quality, more storage)
+### Research Insight: Use 512 Dimensions with text-embedding-3-small
 
-**Recommendation**: Start with 384 (MiniLM) for local development, allow swapping to API model later.
+**Updated recommendation based on research**: Use `text-embedding-3-small` at **512 dimensions** via Matryoshka truncation.
+
+| Model | Dims | Cost/1M tokens | Storage/card | Quality |
+|---|---|---|---|---|
+| text-embedding-3-small (truncated) | **512** | $0.02 | 2KB | ~95% of full quality |
+| text-embedding-3-small (full) | 1536 | $0.02 | 6KB | Baseline |
+| voyage-3.5-lite | 1024 | $0.02 | 4KB | Comparable |
+| all-MiniLM-L6-v2 | 384 | Free | 1.5KB | Good but no API |
+
+**Why 512**: Flashcard content is short text (<200 tokens). Marginal quality gain from larger dims is negligible. 100K cards at 512 dims = ~200MB storage vs 600MB at 1536. Cost: ~$0.10 to embed 100K cards.
+
+Update migration to use `vector(512)` instead of `vector(384)`.
 
 ---
 
@@ -281,10 +289,16 @@ as $$
 $$;
 ```
 
-### When to Add the Index
-- HNSW index is expensive to build and maintain
-- Don't add until there are >1000 cards with embeddings
-- For small collections (<1000 cards), brute-force cosine similarity is fast enough
+### Research Insight: HNSW is Safe to Create Early
+
+**Correction from research**: Unlike IVFFlat, HNSW has no training step and works correctly even on empty tables. It is safe to create the index immediately. At 100K rows with 512-dimensional vectors:
+- Index build: ~30-60 seconds
+- Query time: ~1-2ms at 99%+ recall
+- Memory: ~200-400MB
+
+IVFFlat is only better for >1M rows where memory is a concern. Use HNSW as the default.
+
+Tune `ef_search` at query time for recall vs speed: `SET LOCAL hnsw.ef_search = 100` (default 40, higher = better recall, slower).
 
 ---
 

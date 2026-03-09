@@ -1,6 +1,32 @@
 # Axon — Master Feature Tracker
 
 **Last updated**: 2026-03-09
+**Plans deepened**: 2026-03-09 (6 parallel research agents)
+
+## Research Enhancement Summary
+
+Plans were enhanced with findings from 6 parallel research agents + ts-fsrs Context7 documentation:
+
+### Critical Bugs Found in Current Code
+1. **`card_states` missing `learning_steps` column** — ts-fsrs v5 requires this; without it, every review resets to step 0
+2. **`getDueCards` PostgREST filter bug** — `.eq("cards.deck_id", deckId)` on embedded joins doesn't work correctly; use RPC function instead
+3. **`review_logs` FK cascade** — `on delete cascade` destroys review history needed for FSRS optimization; change to `on delete set null`
+4. **FSRS singleton** — current global scheduler ignores per-user `desired_retention`; need per-user scheduler instances
+
+### Key Technology Decisions (from research)
+| Decision | Choice | Source |
+|---|---|---|
+| AI SDK | `@anthropic-ai/sdk` (NOT Agent SDK) | Agent research |
+| Structured output | `tool_use` with `tool_choice` | Agent research |
+| Embedding model | `text-embedding-3-small` @ 512 dims | Embeddings research |
+| Vector index | HNSW (safe to create on empty tables) | Embeddings research |
+| CSV parser | PapaParse | Import research |
+| Anki parser | JSZip + sql.js | Import research |
+| Charts | recharts | Statistics research |
+| Heatmap | @uiw/react-heat-map | Statistics research |
+| Rate limiting | @upstash/ratelimit + @upstash/redis | Agent research |
+| FSRS optimizer | @open-spaced-repetition/binding (WASM) | ts-fsrs docs |
+| Virtual scroll | @tanstack/react-virtual | Browser research |
 
 ---
 

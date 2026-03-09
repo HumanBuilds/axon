@@ -34,7 +34,12 @@ Individual charts are independent of each other
 
 Install: `npm install recharts`
 
-Alternative: `@nivo/line @nivo/bar @nivo/calendar` (better heatmap support but heavier)
+**Research findings**: Recharts is built on React components (not a wrapper around an imperative library), has excellent TypeScript support, uses D3 submodules (not full D3), and is responsive out of the box with `<ResponsiveContainer>`. SVG-based rendering is perfect for daily review data (~30-365 data points). Nivo is heavier and only wins on exotic chart types.
+
+### Step 1b: Heatmap library
+Install: `npm install @uiw/react-heat-map`
+
+Lightweight (~8kb), SVG-based, zero-dependency GitHub-style contribution heatmap. More purpose-built than trying to use recharts for calendars.
 
 ### Step 2: Create statistics data fetching
 **File**: `src/lib/actions/statistics.ts`
@@ -48,7 +53,17 @@ export async function getReviewForecast(days: number): Promise<{ date: string; c
 export async function getStudyStreak(): Promise<{ date: string; count: number }[]>
 ```
 
-### Step 3: Supabase RPC functions (optional, for performance)
+### Research Insight: All Stats as `security definer` PostgreSQL Functions
+
+Define all statistics queries as database functions called via `supabase.rpc()`. This keeps heavy aggregation server-side and enforces RLS via `auth.uid()` inside the function body.
+
+Add a composite index to support all stats queries:
+```sql
+create index review_logs_user_reviewed_idx
+  on public.review_logs(user_id, reviewed_at desc);
+```
+
+### Step 3: Supabase RPC functions (recommended for performance)
 Complex aggregations are better done in SQL:
 
 ```sql
@@ -221,23 +236,35 @@ order by day;
 
 **Option B**: Use `@nivo/calendar` for a polished calendar heatmap
 
-### Streak Calculation
-```typescript
-function calculateStreak(days: { date: string; count: number }[]): number {
-  let streak = 0;
-  const today = new Date();
-  for (let i = 0; i <= 365; i++) {
-    const date = formatDate(subDays(today, i));
-    const dayData = days.find(d => d.date === date);
-    if (dayData && dayData.count > 0) {
-      streak++;
-    } else if (i > 0) {
-      break; // streak broken (allow today to be 0 if not yet studied)
-    }
-  }
-  return streak;
-}
+### Streak Calculation — SQL Gaps-and-Islands Pattern
+
+**Research insight**: Use the classic SQL "gaps and islands" pattern instead of client-side date math. Single query, no JavaScript loops:
+
+```sql
+create or replace function public.current_study_streak()
+returns int language sql security definer stable as $$
+  with study_days as (
+    select distinct (reviewed_at at time zone 'UTC')::date as d
+    from public.review_logs where user_id = auth.uid()
+  ),
+  numbered as (
+    select d, d - (row_number() over (order by d))::int as grp
+    from study_days
+  ),
+  streaks as (
+    select min(d) as streak_start, max(d) as streak_end, count(*) as streak_len
+    from numbered group by grp
+  )
+  select coalesce(
+    (select streak_len::int from streaks
+     where streak_end >= current_date - interval '1 day'
+     order by streak_end desc limit 1),
+    0
+  );
+$$;
 ```
+
+Subtracting `row_number()` from each date creates groups where consecutive dates share the same group value. Then find the most recent group touching today or yesterday.
 
 ---
 

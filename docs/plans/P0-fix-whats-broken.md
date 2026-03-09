@@ -28,15 +28,36 @@ The auth actions in `src/lib/actions/auth.ts` return `{ error: error.message }` 
 ### Implementation Steps
 
 #### Step 1: Create auth error mapper
-**File**: `src/lib/actions/auth-errors.ts`
+**File**: `src/lib/supabase/auth-errors.ts`
 
-- Map common Supabase auth error codes/messages to user-friendly strings:
-  - `"Invalid login credentials"` → `"Incorrect email or password"`
-  - `"User already registered"` → `"An account with this email already exists"`
-  - `"Email not confirmed"` → `"Please check your email to confirm your account"`
-  - `"Password should be at least 6 characters"` → pass through (already clear)
-  - `"rate_limit"` → `"Too many attempts. Please try again in a few minutes."`
-  - Network/unknown errors → `"Something went wrong. Please try again."`
+Map both Supabase `error.code` AND `error.message` (Supabase is inconsistent about which it sets):
+
+```typescript
+const ERROR_MAP: Record<string, string> = {
+  // error.code values
+  invalid_credentials: "Incorrect email or password.",
+  user_not_found: "No account found with that email.",
+  email_not_confirmed: "Please verify your email before signing in.",
+  over_request_rate_limit: "Too many attempts. Please wait a moment.",
+  weak_password: "Password must be at least 6 characters.",
+  user_already_exists: "An account with that email already exists.",
+  validation_failed: "Please check your input and try again.",
+
+  // error.message fallbacks (Supabase sometimes only sets message)
+  "Invalid login credentials": "Incorrect email or password.",
+  "Email not confirmed": "Please verify your email before signing in.",
+  "User already registered": "An account with that email already exists.",
+  "Password should be at least 6 characters": "Password must be at least 6 characters.",
+};
+
+export function friendlyAuthError(error: { code?: string; message?: string }): string {
+  if (error.code && ERROR_MAP[error.code]) return ERROR_MAP[error.code];
+  if (error.message && ERROR_MAP[error.message]) return ERROR_MAP[error.message];
+  return "Something went wrong. Please try again.";
+}
+```
+
+**Source**: [Supabase Auth Error Codes docs](https://supabase.com/docs/guides/auth/debugging/error-codes) + [known inconsistency issue](https://github.com/supabase/auth/issues/1662)
 
 #### Step 2: Update auth actions
 **File**: `src/lib/actions/auth.ts`
@@ -92,6 +113,8 @@ create table public.user_profiles (
     check (max_new_cards_per_day >= 0),
   max_reviews_per_day int not null default 200
     check (max_reviews_per_day >= 0),
+  learning_steps text[] not null default '{"1m","10m"}',
+  relearning_steps text[] not null default '{"10m"}',
   interleaving_enabled boolean not null default false,
   agent_enabled boolean not null default false,
   created_at timestamptz default now() not null,

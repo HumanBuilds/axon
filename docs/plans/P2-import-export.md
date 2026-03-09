@@ -175,11 +175,20 @@ export interface ImportJSON {
 - Test column mapping
 - Test rows with missing required fields are skipped
 
+### Research Insights — CSV Parsing
+
+**Use PapaParse** (`npm install papaparse @types/papaparse`): Gold standard for CSV parsing in JavaScript. Auto-detects delimiters (comma, tab, pipe, semicolon), handles quoted fields, supports streaming for large files.
+
+**Two-phase import**: Parse first 5 rows client-side for preview (`Papa.parse(file, { preview: 5 })`), then full parse after user confirms mapping.
+
+**Do NOT use** `react-csv-importer` or `react-spreadsheet-import` — they pull in heavy UI framework deps (Chakra/Material) that conflict with Tailwind/Mica.
+
 ### Edge Cases
 - UTF-8 BOM in CSV files (strip it)
 - Windows line endings (CRLF)
 - Empty rows at end of file
 - Very large files (>10K rows) — chunk processing
+- Encoding: add selector defaulting to UTF-8, common alternatives: Shift_JIS, GB2312, EUC-KR
 
 ---
 
@@ -189,6 +198,18 @@ export interface ImportJSON {
 This is the most complex import. An `.apkg` file is a ZIP containing a SQLite database.
 
 ### Implementation Steps
+
+### Research Insights — Library Selection
+
+| Package | Purpose | Size |
+|---------|---------|------|
+| `jszip` | Unzip .apkg files | ~45KB gzipped |
+| `sql.js` | Parse SQLite databases (WebAssembly) | ~400KB wasm + ~90KB JS |
+| `papaparse` | CSV/TSV parsing + generation | ~15KB gzipped |
+
+**Do NOT use** `better-sqlite3` (requires native compilation, breaks Vercel/serverless). **Do NOT use** `anki-apkg-parser` (low maintenance, pulls own SQLite dep).
+
+**sql.js .wasm loading**: Place in `public/sql-wasm.wasm` or load from CDN. On server side, load from `node_modules`.
 
 #### Step 1: Install dependencies
 - `jszip` — unzip `.apkg` files in browser/Node
@@ -213,6 +234,27 @@ Pipeline:
 - Multiple note types: let user confirm mapping per type
 - HTML in fields: strip HTML tags or convert to markdown
 
+**Anki HTML stripping helper** (research-sourced pattern):
+```typescript
+function stripAnkiHtml(html: string): string {
+  return html
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<div>/gi, "\n")
+    .replace(/<\/div>/gi, "")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .trim();
+}
+```
+
+**Anki DB format variants** (handle all three):
+- `collection.anki2` — legacy Anki 2.0
+- `collection.anki21` — modern Anki 2.1+ (most common)
+- `collection.anki21b` — zstd + protobuf (Anki 2.1.50+, defer for v1)
+
 #### Step 4: Import preview
 **File**: `src/components/import/AnkiPreview.tsx`
 
@@ -226,9 +268,25 @@ Pipeline:
 **File**: `src/lib/actions/import.ts`
 
 - `importAnki(cards: ImportedCard[], deckName: string, filename: string)`
-- Batch insert in chunks of 100
+- Batch insert in chunks of **200** (Supabase optimal batch size per research — 200-500 rows is the sweet spot; below 100 too many round trips, above 1000 risk timeouts)
 - Create card_states for each
 - Track import record
+
+**Batch insert helper** (reuse across all import types):
+```typescript
+async function batchInsert<T extends Record<string, unknown>>(
+  supabase: SupabaseClient,
+  table: string,
+  rows: T[],
+  batchSize = 200
+) {
+  for (let i = 0; i < rows.length; i += batchSize) {
+    const batch = rows.slice(i, i + batchSize);
+    const { error } = await supabase.from(table).insert(batch);
+    if (error) throw error;
+  }
+}
+```
 
 #### Step 6: Optional — Review history import
 **Advanced feature** (can defer to P7):

@@ -80,6 +80,16 @@ Every other P1 feature needs success/error feedback. Build the toast system firs
 - Test auto-dismiss after timeout
 - Test multiple toasts stack
 
+### Research Insights
+
+**Accessibility**: Use `aria-live="polite"` with `role="status"` so screen readers announce toasts without interrupting. Only use `aria-live="assertive"` for critical errors.
+
+**Auto-dismiss timing**: Vary by severity — success: 3s, warning: 5s, error: 7s. Errors need more time to read.
+
+**Portal rendering**: Use `createPortal(content, document.body)` to render outside the component tree, avoiding z-index and overflow clipping issues.
+
+**No external deps needed**: React Context + `createPortal` + `crypto.randomUUID()` for IDs. Zero-dependency pattern is ~80 lines total.
+
 ### Design Specs
 - Use `.mica-card` base styling with colored left border
 - Green border for success, red for error, amber for warning
@@ -136,6 +146,43 @@ await supabase.from("card_states").insert({
 - Test that `createCard()` creates both card and card_states
 - Test that new card's due date is set to now (immediately reviewable)
 - Test rollback if card_states insert fails
+
+### Critical: Add `learning_steps` Column to `card_states`
+
+**Research finding**: ts-fsrs v5 added a `learning_steps` field to the Card type that tracks which step the card is on within the learning/relearning sequence. Without persisting this, every review treats the card as step 0, corrupting step progression.
+
+Add to migration:
+```sql
+alter table public.card_states add column learning_steps int not null default 0;
+```
+
+Update the review route (`src/app/api/review/route.ts`) to include `learning_steps` when reconstructing the FSRS card from the database:
+```typescript
+fsrsCard = {
+  // ...existing fields...
+  learning_steps: cardState.learning_steps ?? 0,  // ADD THIS
+} as FSRSCard;
+```
+
+### Critical: Fix `getDueCards` PostgREST Filter Bug
+
+**Research finding**: The current filter `.eq("cards.deck_id", deckId)` on a PostgREST embedded join does NOT work as an inner-join filter — it filters the embedded resource but still returns card_states rows with `cards: null`. Use an RPC function instead:
+
+```sql
+create or replace function public.get_deck_due_counts(p_user_id uuid, p_now timestamptz)
+returns table (deck_id uuid, new_count bigint, learning_count bigint, review_count bigint)
+language sql stable security definer as $$
+  select c.deck_id,
+    count(*) filter (where cs.state = 'new') as new_count,
+    count(*) filter (where cs.state in ('learning', 'relearning')) as learning_count,
+    count(*) filter (where cs.state = 'review' and cs.due <= p_now) as review_count
+  from card_states cs
+  join cards c on c.id = cs.card_id
+  where cs.user_id = p_user_id
+    and (cs.state in ('new', 'learning', 'relearning') or cs.due <= p_now)
+  group by c.deck_id;
+$$;
+```
 
 ### Edge Cases
 - Race condition: card created but state insert fails → orphaned card
@@ -319,8 +366,18 @@ export async function deleteCard(cardId: string) {
 #### Step 6: Update FK constraint on review_logs
 **File**: Migration
 
-- The current `on delete cascade` on `review_logs.card_id` is fine because we're not deleting anymore
-- But consider: what about `card_states`? Archived cards should keep their states for potential restore
+**Research finding**: The current `on delete cascade` on `review_logs.card_id` would destroy review history needed for FSRS parameter optimization if a card is ever hard-deleted. Change to `SET NULL`:
+
+```sql
+alter table public.review_logs
+  drop constraint review_logs_card_id_fkey,
+  add constraint review_logs_card_id_fkey
+    foreign key (card_id) references public.cards(id)
+    on delete set null;
+alter table public.review_logs alter column card_id drop not null;
+```
+
+This way, even permanently deleted cards leave review_logs intact for future FSRS optimization.
 
 #### Step 7: Tests
 - Test `deleteCard` sets `archived_at` instead of deleting
@@ -391,6 +448,14 @@ export function createScheduler(profile?: { desired_retention?: number; fsrs_wei
 
 - `reviewCard()` and `getNextStates()` should accept a scheduler instance
 - Fetch user profile in the review API route and create scheduler with their settings
+
+### Research Insights — Settings Form
+
+**React 19 `useActionState`**: Use this instead of manual `useState` + pending tracking. It manages pending state automatically and flows typed state through server action return values. Progressive enhancement: form works without JS.
+
+**Validation**: Use `zod` for server-side validation of settings values. Lightweight, TypeScript-native schema validation.
+
+**Retention slider**: Default 0.9. Warn users that values above 0.97 produce diminishing returns and very short intervals. Values below 0.8 produce long intervals that may lead to forgetting.
 
 #### Step 5: Wire up daily limits to study session
 **File**: `src/app/(dashboard)/decks/[deckId]/study/page.tsx`

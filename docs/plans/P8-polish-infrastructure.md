@@ -71,6 +71,13 @@ useEffect(() => {
 - "Space" below "Show Answer" button
 - "1" below Again, "2" below Hard, "3" below Good, "4" below Easy
 
+### Research Insights
+
+**Create a reusable `useKeyboardShortcuts` hook** (`src/lib/hooks/useKeyboardShortcuts.ts`):
+- Check `event.repeat` to prevent firing multiple times when key held down
+- Exclude `INPUT`, `TEXTAREA`, `SELECT` elements so shortcuts never interfere with text editing
+- Use `useMemo` on the shortcuts map to prevent `useEffect` re-registering listeners every render
+
 #### Step 3: Tests
 - Test space key reveals answer
 - Test 1-4 keys submit ratings

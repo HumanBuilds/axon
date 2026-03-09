@@ -29,10 +29,18 @@ Topic Generator ──── independent of Card Coach
 
 ## Feature 0: Agent Infrastructure
 
-### Step 1: Install Claude Agent SDK
+### Critical Research Insight: SDK Selection
+
+**Use `@anthropic-ai/sdk` (standard TypeScript SDK), NOT `@anthropic-ai/claude-agent-sdk`.**
+
+The Agent SDK is for building IDE-like coding agents (spawns subprocess, manages files, runs shell commands). It is overkill for calling Claude to review flashcards. The standard SDK provides everything needed: streaming, structured output via `tool_use`, and is far simpler to integrate into Next.js API routes.
+
+### Step 1: Install Anthropic SDK
 **Package**: `@anthropic-ai/sdk` (latest)
 
-Add to `package.json` dependencies.
+```bash
+npm install @anthropic-ai/sdk
+```
 
 ### Step 2: API key management
 **File**: `.env.local`
@@ -150,9 +158,45 @@ Respond in JSON format:
 - Test UI renders suggestions correctly
 - Test "Apply" updates card fields
 
+### Research Insight: Use `tool_use` for Structured Output
+
+Instead of parsing free-text JSON from Claude, use `tool_use` with `tool_choice` to force structured output:
+
+```typescript
+const response = await anthropic.messages.create({
+  model: "claude-sonnet-4-5-20250929",
+  max_tokens: 2048,
+  system: CARD_COACH_SYSTEM_PROMPT,
+  messages: [{ role: "user", content: `Review this card:\nFront: ${front}\nBack: ${back}` }],
+  tools: [{
+    name: "submit_review",
+    description: "Submit the structured card review",
+    input_schema: {
+      type: "object",
+      properties: {
+        suggestions: { type: "string" },
+        revised_front: { type: "string" },
+        revised_back: { type: "string" },
+        should_split: { type: "boolean" },
+      },
+      required: ["suggestions"],
+    },
+  }],
+  tool_choice: { type: "tool", name: "submit_review" },
+});
+```
+
+This is more reliable than parsing free-text JSON — works across all Claude models.
+
 ### Model Selection
-- Default: `claude-sonnet-4-6` (speed/cost balance)
-- Could make configurable in settings later (Opus for higher quality)
+
+| Use Case | Model | Why |
+|---|---|---|
+| Card Coach | `claude-sonnet-4-5` | Good reasoning, fast, cost-effective for evaluation |
+| Topic Generator | `claude-sonnet-4-5` | Creative generation, fast enough for streaming |
+| Quick suggestions | `claude-haiku-3-5` | Sub-second latency for inline hints |
+
+**Rule of thumb**: Start with Sonnet for everything. Only upgrade to Opus if quality gaps are observed.
 
 ---
 
@@ -263,6 +307,25 @@ export function useStreamingResponse<T>(url: string) {
 - Final event signals completion
 - Error events include error message
 
+### Research Insight: Cost Tracking
+
+Track API usage per user to enforce daily budgets:
+
+```sql
+create table agent_usage (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) not null,
+  endpoint text not null,
+  model text not null,
+  input_tokens int not null,
+  output_tokens int not null,
+  cost_usd numeric(10,6) not null,
+  created_at timestamptz default now()
+);
+```
+
+Check daily spend before each agent call. Default budget: $0.50/user/day.
+
 ### Edge Cases
 - Network disconnect during streaming → show partial results + retry option
 - User navigates away → abort controller cancels stream
@@ -275,12 +338,32 @@ export function useStreamingResponse<T>(url: string) {
 
 ### Implementation Steps
 
-#### Step 1: Rate limit store
-**File**: `src/lib/agents/rate-limit.ts`
+### Research Insight: Use Upstash for Serverless Rate Limiting
 
-- Simple in-memory store with sliding window
-- Key: `${userId}:${agentType}`
-- For production: move to Redis/Upstash
+```bash
+npm install @upstash/ratelimit @upstash/redis
+```
+
+```typescript
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
+
+export const coachRateLimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(60, "1 h"),
+  prefix: "axon:coach",
+});
+
+export const generatorRateLimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(20, "1 h"),
+  prefix: "axon:generate",
+});
+```
+
+Requires `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` in `.env.local`.
+
+**Fallback for dev**: In-memory Map-based rate limiter (same interface, no Redis needed).
 
 #### Step 2: Rate limit middleware
 - Check before each agent API call
