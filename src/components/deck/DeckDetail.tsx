@@ -6,7 +6,7 @@ import { createCard, deleteCard, updateCard } from "@/lib/actions/cards";
 import { deleteDeck } from "@/lib/actions/decks";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/Toast";
-import { Edit2, Trash2, Plus } from "react-feather";
+import { Edit2, Trash2, Plus, Download } from "react-feather";
 import type { Card, Deck } from "@/lib/types";
 
 interface Props {
@@ -115,6 +115,13 @@ export function DeckDetail({ deck, cards, dueCount }: Props) {
                 Study ({dueCount} due)
               </Link>
             )}
+            <Link
+              href={`/decks/${deck.id}/export`}
+              className="rounded-md border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50"
+              title="Export"
+            >
+              <Download size={16} />
+            </Link>
             <button
               onClick={handleDeleteDeck}
               className="rounded-md border border-red-200 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50"
