@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { reviewCard, createNewCard, mapState } from "@/lib/fsrs";
+import { reviewCard, createNewCard, mapState, createScheduler } from "@/lib/fsrs";
 import type { Rating } from "@/lib/types";
 import { State, type Card as FSRSCard } from "ts-fsrs";
 
@@ -44,13 +44,23 @@ export async function POST(request: NextRequest) {
       lapses: cardState.lapses,
       state: stateFromString(cardState.state),
       last_review: cardState.last_review ? new Date(cardState.last_review) : undefined,
+      learning_steps: cardState.learning_steps ?? 0,
     } as FSRSCard;
   } else {
     fsrsCard = createNewCard();
   }
 
+  // Load user profile for per-user scheduler
+  const { data: profile } = await supabase
+    .from("user_profiles")
+    .select("desired_retention, fsrs_weights")
+    .eq("id", user.id)
+    .single();
+
+  const userScheduler = createScheduler(profile ?? undefined);
+
   // Compute next state
-  const result = reviewCard(fsrsCard, rating, now);
+  const result = reviewCard(fsrsCard, rating, now, userScheduler);
   const newCard = result.card;
 
   const stateBefore = {
@@ -79,6 +89,7 @@ export async function POST(request: NextRequest) {
       reps: newCard.reps,
       lapses: newCard.lapses,
       scheduled_days: newCard.scheduled_days,
+      learning_steps: newCard.learning_steps ?? 0,
     });
 
   if (stateError) {

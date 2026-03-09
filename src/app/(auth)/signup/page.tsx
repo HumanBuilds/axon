@@ -27,7 +27,7 @@ export default function SignupPage() {
 
         <form action={handleSubmit} className="space-y-4">
           {error && (
-            <div className="rounded-md bg-red-50 p-3 text-sm text-red-700">
+            <div role="alert" aria-live="polite" className="rounded-md bg-red-50 p-3 text-sm text-red-700">
               {error}
             </div>
           )}

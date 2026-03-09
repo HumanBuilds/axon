@@ -22,12 +22,22 @@ export default async function StudyPage({
 
   if (!deck) redirect("/");
 
-  // Get cards with their states
+  // Fetch user profile for daily limits
+  const { data: profile } = await supabase
+    .from("user_profiles")
+    .select("max_new_cards_per_day, max_reviews_per_day")
+    .eq("id", user.id)
+    .single();
+  const maxNew = profile?.max_new_cards_per_day ?? 20;
+  const maxReviews = profile?.max_reviews_per_day ?? 200;
+
+  // Get non-archived cards with their states
   const { data: cards } = await supabase
     .from("cards")
     .select("*")
     .eq("deck_id", deckId)
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
+    .is("archived_at", null);
 
   const cardIds = (cards ?? []).map((c) => c.id);
 
@@ -52,8 +62,8 @@ export default async function StudyPage({
     .filter(Boolean);
 
   const studyQueue = [
-    ...dueCards,
-    ...newCards.slice(0, 20).map((c) => ({ ...c, state: null })),
+    ...dueCards.slice(0, maxReviews),
+    ...newCards.slice(0, maxNew).map((c) => ({ ...c, state: null })),
   ];
 
   return (
