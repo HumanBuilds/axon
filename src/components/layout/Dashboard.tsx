@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { createDeck } from "@/lib/actions/decks";
 import { logout } from "@/lib/actions/auth";
+import { useToast } from "@/components/ui/Toast";
+import { Settings, Plus, BarChart2, Upload, Zap, Layers } from "react-feather";
 
 interface DeckWithCount {
   id: string;
@@ -12,9 +14,17 @@ interface DeckWithCount {
   created_at: string;
   updated_at: string;
   cards: { count: number }[];
+  dueCount?: number;
 }
 
-export function Dashboard({ decks }: { decks: DeckWithCount[] }) {
+export function Dashboard({
+  decks,
+  dueCounts,
+}: {
+  decks: DeckWithCount[];
+  dueCounts?: Record<string, number>;
+}) {
+  const { addToast } = useToast();
   const [showCreate, setShowCreate] = useState(false);
   const [newDeckName, setNewDeckName] = useState("");
   const [creating, setCreating] = useState(false);
@@ -22,10 +32,16 @@ export function Dashboard({ decks }: { decks: DeckWithCount[] }) {
   async function handleCreate() {
     if (!newDeckName.trim()) return;
     setCreating(true);
-    await createDeck(newDeckName.trim());
-    setNewDeckName("");
-    setShowCreate(false);
-    setCreating(false);
+    try {
+      await createDeck(newDeckName.trim());
+      setNewDeckName("");
+      setShowCreate(false);
+      addToast.success("Deck created");
+    } catch {
+      addToast.error("Failed to create deck");
+    } finally {
+      setCreating(false);
+    }
   }
 
   return (
@@ -33,14 +49,31 @@ export function Dashboard({ decks }: { decks: DeckWithCount[] }) {
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <h1 className="text-xl font-bold text-gray-900">Axon</h1>
-          <form action={logout}>
-            <button
-              type="submit"
-              className="text-sm text-gray-500 hover:text-gray-700"
-            >
-              Sign out
-            </button>
-          </form>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link href="/browser" className="p-1.5 text-gray-400 hover:text-gray-600" title="Card Browser">
+              <Layers size={20} />
+            </Link>
+            <Link href="/stats" className="p-1.5 text-gray-400 hover:text-gray-600" title="Statistics">
+              <BarChart2 size={20} />
+            </Link>
+            <Link href="/generate" className="p-1.5 text-gray-400 hover:text-gray-600 hidden sm:block" title="Generate with AI">
+              <Zap size={20} />
+            </Link>
+            <Link href="/import" className="p-1.5 text-gray-400 hover:text-gray-600 hidden sm:block" title="Import">
+              <Upload size={20} />
+            </Link>
+            <Link href="/settings" className="p-1.5 text-gray-400 hover:text-gray-600" title="Settings">
+              <Settings size={20} />
+            </Link>
+            <form action={logout}>
+              <button
+                type="submit"
+                className="text-sm text-gray-500 hover:text-gray-700 ml-1"
+              >
+                Sign out
+              </button>
+            </form>
+          </div>
         </div>
       </header>
 
@@ -49,9 +82,9 @@ export function Dashboard({ decks }: { decks: DeckWithCount[] }) {
           <h2 className="text-lg font-semibold text-gray-900">Your Decks</h2>
           <button
             onClick={() => setShowCreate(true)}
-            className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm text-white font-medium hover:bg-indigo-700"
+            className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm text-white font-medium hover:bg-indigo-700 flex items-center gap-1"
           >
-            New Deck
+            <Plus size={16} /> New Deck
           </button>
         </div>
 
@@ -70,7 +103,7 @@ export function Dashboard({ decks }: { decks: DeckWithCount[] }) {
               disabled={creating || !newDeckName.trim()}
               className="rounded-md bg-indigo-600 px-3 py-2 text-sm text-white font-medium hover:bg-indigo-700 disabled:opacity-50"
             >
-              Create
+              {creating ? "Creating..." : "Create"}
             </button>
             <button
               onClick={() => { setShowCreate(false); setNewDeckName(""); }}
@@ -87,21 +120,31 @@ export function Dashboard({ decks }: { decks: DeckWithCount[] }) {
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {decks.map((deck) => (
-              <Link
-                key={deck.id}
-                href={`/decks/${deck.id}`}
-                className="block rounded-lg border border-gray-200 bg-white p-5 shadow-sm hover:shadow-md transition-shadow"
-              >
-                <h3 className="font-semibold text-gray-900">{deck.name}</h3>
-                {deck.description && (
-                  <p className="mt-1 text-sm text-gray-500">{deck.description}</p>
-                )}
-                <p className="mt-3 text-xs text-gray-400">
-                  {deck.cards?.[0]?.count ?? 0} cards
-                </p>
-              </Link>
-            ))}
+            {decks.map((deck) => {
+              const due = dueCounts?.[deck.id] ?? 0;
+              return (
+                <Link
+                  key={deck.id}
+                  href={`/decks/${deck.id}`}
+                  className="block rounded-lg border border-gray-200 bg-white p-5 shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <h3 className="font-semibold text-gray-900">{deck.name}</h3>
+                  {deck.description && (
+                    <p className="mt-1 text-sm text-gray-500">{deck.description}</p>
+                  )}
+                  <div className="mt-3 flex items-center justify-between">
+                    <p className="text-xs text-gray-400">
+                      {deck.cards?.[0]?.count ?? 0} cards
+                    </p>
+                    {due > 0 && (
+                      <span className="text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">
+                        {due} due
+                      </span>
+                    )}
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         )}
       </main>

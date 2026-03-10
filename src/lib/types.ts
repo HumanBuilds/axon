@@ -13,6 +13,8 @@ export interface Card {
   source: CardSource;
   created_at: string;
   updated_at: string;
+  archived_at: string | null;
+  embedding: number[] | null;
 }
 
 export interface CardState {
@@ -27,11 +29,12 @@ export interface CardState {
   reps: number;
   lapses: number;
   scheduled_days: number;
+  learning_steps: number;
 }
 
 export interface ReviewLog {
   id: string;
-  card_id: string;
+  card_id: string | null;
   user_id: string;
   rating: Rating;
   elapsed_days: number;
@@ -52,8 +55,29 @@ export interface Deck {
 
 export interface UserProfile {
   id: string;
-  email: string;
   display_name: string | null;
   desired_retention: number;
+  max_new_cards_per_day: number;
+  max_reviews_per_day: number;
+  learning_steps: string[];
+  relearning_steps: string[];
+  fsrs_weights: number[] | null;
+  last_optimization: string | null;
+  interleaving_enabled: boolean;
+  agent_enabled: boolean;
   created_at: string;
+  updated_at: string;
+}
+
+export interface ImportRecord {
+  id: string;
+  user_id: string;
+  format: ImportFormat;
+  filename: string;
+  deck_id: string | null;
+  card_count: number;
+  error_count: number;
+  status: "pending" | "processing" | "completed" | "failed";
+  error_message: string | null;
+  imported_at: string;
 }

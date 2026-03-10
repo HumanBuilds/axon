@@ -27,6 +27,7 @@ export default async function DeckPage({
     .select("*")
     .eq("deck_id", deckId)
     .eq("user_id", user.id)
+    .is("archived_at", null)
     .order("created_at", { ascending: true });
 
   const now = new Date().toISOString();
